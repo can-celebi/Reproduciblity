@@ -6,15 +6,17 @@
 project/
 ├── js/
 │   ├── run.js              # Main execution script
+│   ├── viewer.html         # Diagnostic viewer for results
 │   ├── package.json        # Dependencies
-│   ├── keys/
-│   │   └── secret.js       # Azure API credentials (DO NOT COMMIT)
+│   ├── keys/               # (gitignored)
+│   │   └── secret.js       # Azure API credentials
 │   ├── prompts/
 │   │   └── prompts.js      # Dataset-specific prompts
 │   └── schemas/
 │       └── schemas.js      # Dataset-specific JSON schemas
 ├── data/
-│   └── instances.csv       # Input data (id, dataset, text)
+│   ├── instances.csv       # Main input data
+│   └── instances_test.csv  # Test data (70 instances)
 └── output/
     ├── run_001.jsonl       # Results from run 1
     ├── run_002.jsonl       # Results from run 2
@@ -28,50 +30,92 @@ cd js
 npm install openai csv-parse
 ```
 
-Then edit:
-1. `keys/secret.js` - Add your Azure credentials
-2. `prompts/prompts.js` - Add your prompts for each dataset
-3. `schemas/schemas.js` - Define classification categories for each dataset
+Then configure:
+1. `keys/secret.js` - Add Azure resource endpoints and API keys
+2. `prompts/prompts.js` - Add prompts for each dataset_task combination
+3. `schemas/schemas.js` - Define JSON schemas for each dataset_task combination
+
+## Multi-Resource Configuration
+
+The script supports multiple Azure OpenAI resources for parallel processing. Each resource has independent rate limits (150K TPM, 900 RPM).
+
+**Current setup: 7 resources = 1,050K TPM total capacity**
+
+Edit `keys/secret.js`:
+```javascript
+const resources = [
+    {
+        name: "resource-1",
+        endpoint: "https://your-resource-1.openai.azure.com/",
+        apiKey: "your-api-key-1",
+        apiVersion: "2024-12-01-preview"
+    },
+    // ... add more resources
+];
+module.exports = { resources };
+```
 
 ## Input Data Format
 
 `data/instances.csv` must have these columns:
 - `id` - Unique integer identifier (1, 2, 3, ...)
-- `dataset` - Dataset type (bc, p1, p2, l1, l2, l3)
-- `text` - The text to classify
+- `localId` - Original ID from source dataset (for linking back to benchmarks)
+- `dataset` - Dataset type: p1, p2, l1, l2, l3
+- `task` - Classification task: promise, level, belief
+- `input` - The text/content to classify
 
 ```csv
-id,dataset,text
-1,bc,"i think most people will go for 50?"
-2,bc,"The equilibrium is 0"
-3,p1,"I will choose A because..."
+id,localId,dataset,task,input
+1,subject_001,p1,promise,"I promise to cooperate..."
+2,apc_301,l2,level,"The payoff matrix shows..."
+3,apc_301,l2,belief,"I think they'll pick..."
+4,bc_401,l3,level,"I'll pick 33 because..."
 ```
 
-The `dataset` value determines which prompt and schema are used.
+**Note:** The combination `dataset_task` determines which prompt and schema to use.
+
+### Dataset/Task Combinations
+
+| Key | Dataset | Task | Description |
+|-----|---------|------|-------------|
+| `p1_promise` | p1 | promise | Single-person promise classification |
+| `p2_promise` | p2 | promise | Multi-player chat promise classification |
+| `l1_level` | l1 | level | Strategic voting level (0-3) |
+| `l2_level` | l2 | level | Asymmetric coordination level (0-5) |
+| `l2_belief` | l2 | belief | Asymmetric coordination belief categories |
+| `l3_level` | l3 | level | Beauty contest level |
+| `l3_belief` | l3 | belief | Beauty contest belief bins |
 
 ## Running
+
+### Test run (verify all 7 resources work)
+```bash
+# Set inputFile: "instances_test.csv" in run.js CONFIG
+node run.js 1
+# Expected: 70/70 completed, ~10 requests per resource, 0 errors
+```
 
 ### Single run
 ```bash
 node run.js 1
 ```
 
-### Multiple runs
+### Multiple runs (50 runs for stability study)
 ```bash
-node run.js 1 20    # Runs 1 through 20
+node run.js 1 50
 ```
 
 ### Resume interrupted run
-Just run the same command. The script:
-1. Reads existing output file
-2. Skips completed instances
-3. Retries instances that had errors
-4. Continues from where it stopped
+Just run the same command. The script automatically:
+- Reads existing output file
+- Skips completed instances  
+- Retries instances that had errors
+- Continues from where it stopped
 
 ```bash
-# If interrupted during run 5:
-node run.js 5 20
-# Resumes run 5, then continues to 20
+# If interrupted during run 25:
+node run.js 25 50
+# Resumes run 25, then continues to 50
 ```
 
 ## Output Format (JSONL)
@@ -81,15 +125,18 @@ Each line is a JSON object:
 ```json
 {
   "id": 1,
-  "dataset": "bc",
+  "localId": "subject_001",
+  "dataset": "p1",
+  "task": "promise",
   "run": 1,
-  "text": "i think most people will go for 50?",
-  "output": {"level": "1", "belief": "46"},
+  "input": "I promise to cooperate...",
+  "output": {"classification": "1"},
   "timestamp": 1735123456,
   "model": "gpt-4o-2024-08-06",
   "seed": 31,
   "temperature": 0,
   "fingerprint": "fp_abc123",
+  "resource": "resource-3",
   "duration": 0.823,
   "numInputTokens": 456,
   "numOutputTokens": 12,
@@ -99,21 +146,36 @@ Each line is a JSON object:
 }
 ```
 
+## Diagnostic Viewer
+
+Open `viewer.html` in a browser:
+- Drag & drop multiple JSONL files
+- Filter by dataset, task, status, ID
+- View token usage and costs
+- Inspect logprobs and alternatives for key classification token
+- Configurable key token position
+
 ## Reading Output in R
 
 ```r
 library(jsonlite)
+library(dplyr)
 
 # Read single run
 run1 <- stream_in(file("output/run_001.jsonl"))
 
 # Read all runs
 files <- list.files("output", pattern = "run_.*\\.jsonl", full.names = TRUE)
-all_runs <- do.call(rbind, lapply(files, function(f) stream_in(file(f))))
+all_runs <- bind_rows(lapply(files, function(f) stream_in(file(f))))
 
-# Extract classification
-all_runs$level <- sapply(all_runs$output, function(x) x$level)
-all_runs$belief <- sapply(all_runs$output, function(x) x$belief)
+# Extract classification (for single-output tasks)
+all_runs$classification <- sapply(all_runs$output, function(x) x$classification)
+
+# For p2_promise (multi-output)
+p2_data <- all_runs %>% filter(dataset == "p2")
+p2_data$p1_class <- sapply(p2_data$output, function(x) x$p1)
+p2_data$p2_class <- sapply(p2_data$output, function(x) x$p2)
+p2_data$p3_class <- sapply(p2_data$output, function(x) x$p3)
 ```
 
 ## Configuration
@@ -122,48 +184,59 @@ Edit `CONFIG` in `run.js`:
 
 ```javascript
 const CONFIG = {
+    // Model Settings
     deployment: "gpt-4o",
     seed: 31,
+    maxTokens: 50,
     temperature: 0,
     topLogprobs: 20,
     
-    batchSize: 5,              // Concurrent API calls
-    delayBetweenBatches: 1000, // ms between batches
+    // Execution Settings (for 7 resources)
+    batchSize: 35,              // 5 per resource × 7 resources
+    delayBetweenBatches: 1200,  // 1.2 seconds between batches
     
-    maxRetries: 5,             // Retries per failed call
-    initialRetryDelay: 2000,   // Exponential backoff start
-    longPauseDelay: 600000,    // 10 min pause after many errors
+    // Retry Settings
+    maxRetries: 5,
+    initialRetryDelay: 2000,
+    longPauseDelay: 600000,     // 10 min pause after many errors
+    rateLimitPause: 60000,      // 1 min pause on rate limit
+    
+    // Paths
+    inputFile: "instances.csv", // or "instances_test.csv" for testing
 };
 ```
 
 ## Error Handling
 
-The script handles errors robustly:
-
-1. **Per-call retry**: Each API call retries up to 5 times with exponential backoff (2s, 4s, 8s, 16s, 32s)
-
-2. **Error recording**: Failed calls are saved with `hasError: true`
-
-3. **Error retry on resume**: When you restart, instances with errors are automatically retried
-
-4. **Rate limit protection**: If 10+ consecutive calls fail, pauses for 10 minutes
+1. **Per-call retry**: 5 attempts with exponential backoff (2s, 4s, 8s, 16s, 32s)
+2. **Resource rotation**: On rate limit, immediately switches to different resource
+3. **Error recording**: Failed calls saved with `hasError: true`
+4. **Auto-retry on resume**: Errors automatically retried when script restarts
+5. **Long pause**: 10-minute pause after 20 consecutive errors
 
 ## Time Estimates
 
-With `batchSize: 5` and ~1.5s average response time:
+**With 7 resources (1,050K TPM capacity):**
 
-| Instances | Runs | Approximate Time |
-|-----------|------|------------------|
-| 3,087 | 1 | ~15 min |
-| 3,087 | 10 | ~2.5 hours |
-| 3,087 | 20 | ~5 hours |
-| 3,087 | 30 | ~7.5 hours |
+| Scenario | Time/run | 50 runs |
+|----------|----------|---------|
+| Current L2 prompt (3210 words) | ~8 min | ~7 hours |
+| Shortened L2 prompt (~1500 words) | ~5 min | ~4 hours |
 
 ## Checklist Before Running
 
-- [ ] `keys/secret.js` has correct Azure credentials
-- [ ] `prompts/prompts.js` has prompts for all datasets in your CSV
-- [ ] `schemas/schemas.js` has schemas for all datasets in your CSV
-- [ ] `data/instances.csv` has columns: id, dataset, text
-- [ ] All dataset values in CSV have matching prompt and schema
-- [ ] Test with `node run.js 1` on small dataset first
+- [ ] `keys/secret.js` has all 7 resources with correct endpoints and API keys
+- [ ] All resources have gpt-4o deployed
+- [ ] Content filters disabled/minimized on Azure resources
+- [ ] `prompts/prompts.js` has prompts for all 7 dataset_task combinations
+- [ ] `schemas/schemas.js` has schemas for all 7 dataset_task combinations  
+- [ ] `data/instances.csv` has columns: id, localId, dataset, task, input
+- [ ] Test with `instances_test.csv` first (expect ~10 requests per resource)
+- [ ] Switch `inputFile` to `"instances.csv"` for production run
+- [ ] Run: `node run.js 1 50`
+
+## Cost Estimate
+
+GPT-4o pricing: $2.50/1M input tokens, $10/1M output tokens
+
+Estimate for 3,087 instances × 50 runs: **~$1,000** (varies with prompt lengths)
