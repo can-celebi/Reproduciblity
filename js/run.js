@@ -1,0 +1,535 @@
+const fs = require("fs");
+const path = require("path");
+const { parse } = require("csv-parse/sync");
+const { AzureOpenAI } = require("openai");
+
+// =============================================================================
+// IMPORTS
+// =============================================================================
+
+const { resources } = require("./keys/secret");  // Now exports array of resources
+const { prompts } = require("./prompts/prompts");
+const { schemas } = require("./schemas/schemas");
+
+// =============================================================================
+// CONFIGURATION
+// =============================================================================
+
+const CONFIG = {
+    // Model Settings
+    deployment: "gpt-4o",
+    seed: 31,
+    maxTokens: 50,
+    temperature: 0,
+    topLogprobs: 20,
+    
+    // Execution Settings
+    // With 7 resources at 150K TPM each = 1,050K TPM total
+    // Batch size = 5 per resource × 7 resources = 35
+    batchSize: 35,
+    delayBetweenBatches: 1200,  // 1.2 seconds - conservative for rate limits
+    
+    // Retry Settings
+    maxRetries: 5,
+    initialRetryDelay: 2000,
+    longPauseDelay: 600000,     // 10 minutes
+    consecutiveErrorsBeforePause: 20,
+    rateLimitPause: 60000,      // 1 minute on rate limit
+    
+    // Paths
+    dataDir: "../data",
+    outputDir: "../output",
+    inputFile: "instances_test.csv",  // Change to "instances.csv" for real run
+};
+
+// =============================================================================
+// MULTI-RESOURCE CLIENT POOL
+// =============================================================================
+
+class ClientPool {
+    constructor(resourceConfigs) {
+        this.clients = resourceConfigs.map((config, index) => ({
+            id: index,
+            name: config.name || `resource-${index}`,
+            client: new AzureOpenAI({
+                endpoint: config.endpoint,
+                apiKey: config.apiKey,
+                apiVersion: config.apiVersion || "2024-08-01-preview",
+                deployment: CONFIG.deployment
+            }),
+            requestCount: 0,
+            tokenCount: 0,
+            lastUsed: 0,
+            errorCount: 0
+        }));
+        
+        this.currentIndex = 0;
+        console.log(`Initialized ${this.clients.length} Azure OpenAI resources:`);
+        this.clients.forEach(c => console.log(`  - ${c.name}: ${resourceConfigs[c.id].endpoint}`));
+    }
+    
+    // Round-robin selection
+    getNextClient() {
+        const client = this.clients[this.currentIndex];
+        this.currentIndex = (this.currentIndex + 1) % this.clients.length;
+        return client;
+    }
+    
+    // Get client with least recent usage (for better distribution)
+    getLeastRecentClient() {
+        return this.clients.reduce((min, c) => c.lastUsed < min.lastUsed ? c : min);
+    }
+    
+    // Get client with lowest error count
+    getHealthiestClient() {
+        return this.clients.reduce((min, c) => c.errorCount < min.errorCount ? c : min);
+    }
+    
+    recordUsage(clientWrapper, tokens) {
+        clientWrapper.requestCount++;
+        clientWrapper.tokenCount += tokens;
+        clientWrapper.lastUsed = Date.now();
+    }
+    
+    recordError(clientWrapper) {
+        clientWrapper.errorCount++;
+    }
+    
+    getStats() {
+        return this.clients.map(c => ({
+            name: c.name,
+            requests: c.requestCount,
+            tokens: c.tokenCount,
+            errors: c.errorCount
+        }));
+    }
+    
+    printStats() {
+        console.log("\n--- Resource Usage ---");
+        for (const c of this.clients) {
+            console.log(`  ${c.name}: ${c.requestCount} requests, ${c.tokenCount.toLocaleString()} tokens, ${c.errorCount} errors`);
+        }
+    }
+}
+
+// Initialize client pool
+const clientPool = new ClientPool(resources);
+
+// =============================================================================
+// FILE UTILITIES
+// =============================================================================
+
+/**
+ * Load instances from CSV
+ * Expected columns: id, localId, dataset, task, input
+ */
+function loadInstances(filePath) {
+    const content = fs.readFileSync(filePath, "utf-8");
+    const records = parse(content, {
+        columns: true,
+        skip_empty_lines: true,
+        trim: true
+    });
+    
+    console.log(`Loaded ${records.length} instances from ${filePath}`);
+    
+    if (records.length > 0) {
+        const firstRow = records[0];
+        const required = ["id", "localId", "dataset", "task", "input"];
+        const missing = required.filter(col => !(col in firstRow));
+        if (missing.length > 0) {
+            throw new Error(`CSV missing required columns: ${missing.join(", ")}`);
+        }
+    }
+    
+    return records;
+}
+
+/**
+ * Load existing results from JSONL file
+ */
+function loadExistingResults(filePath) {
+    const completed = new Set();
+    const errors = new Set();
+    const all = [];
+    
+    if (!fs.existsSync(filePath)) {
+        console.log(`No existing output file. Starting fresh.`);
+        return { completed, errors, all };
+    }
+    
+    const content = fs.readFileSync(filePath, "utf-8");
+    const lines = content.trim().split("\n").filter(line => line.length > 0);
+    
+    for (const line of lines) {
+        try {
+            const record = JSON.parse(line);
+            all.push(record);
+            
+            if (record.hasError) {
+                errors.add(record.id);
+            } else {
+                completed.add(record.id);
+            }
+        } catch (e) {
+            console.warn(`Could not parse line: ${line.substring(0, 50)}...`);
+        }
+    }
+    
+    console.log(`Loaded ${completed.size} completed, ${errors.size} errors from existing file`);
+    return { completed, errors, all };
+}
+
+function writeAllResults(filePath, results) {
+    const content = results.map(r => JSON.stringify(r)).join("\n") + "\n";
+    fs.writeFileSync(filePath, content);
+}
+
+function appendResult(filePath, result) {
+    const line = JSON.stringify(result) + "\n";
+    fs.appendFileSync(filePath, line);
+}
+
+// =============================================================================
+// API CALL WITH RETRY AND RESOURCE ROTATION
+// =============================================================================
+
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+/**
+ * Make API call with retry, rotating through resources on failure
+ */
+async function callWithRetry(systemPrompt, userText, schema, instanceId) {
+    let lastError;
+    let clientWrapper = clientPool.getNextClient();
+    
+    for (let attempt = 1; attempt <= CONFIG.maxRetries; attempt++) {
+        try {
+            const response = await clientWrapper.client.chat.completions.create({
+                messages: [
+                    { role: "system", content: systemPrompt },
+                    { role: "user", content: userText }
+                ],
+                seed: CONFIG.seed,
+                max_tokens: CONFIG.maxTokens,
+                temperature: CONFIG.temperature,
+                logprobs: true,
+                top_logprobs: CONFIG.topLogprobs,
+                response_format: schema
+            });
+            
+            // Record successful usage
+            const totalTokens = response.usage.prompt_tokens + response.usage.completion_tokens;
+            clientPool.recordUsage(clientWrapper, totalTokens);
+            
+            return { success: true, response, resourceName: clientWrapper.name };
+            
+        } catch (error) {
+            lastError = error;
+            clientPool.recordError(clientWrapper);
+            
+            const isRateLimit = error.status === 429 || 
+                               error.code === 'rate_limit_exceeded' ||
+                               error.message?.toLowerCase().includes('rate');
+            
+            console.error(`  [${clientWrapper.name}] Attempt ${attempt}/${CONFIG.maxRetries} failed for instance ${instanceId}: ${error.message}`);
+            
+            if (attempt < CONFIG.maxRetries) {
+                if (isRateLimit) {
+                    // On rate limit, try a different resource immediately
+                    console.log(`  ⚠️ Rate limit on ${clientWrapper.name}, switching resource...`);
+                    clientWrapper = clientPool.getHealthiestClient();
+                    await sleep(1000);  // Brief pause before trying another
+                } else {
+                    // Other errors: exponential backoff
+                    const delay = CONFIG.initialRetryDelay * Math.pow(2, attempt - 1);
+                    console.log(`  Waiting ${delay / 1000}s before retry...`);
+                    await sleep(delay);
+                    // Also try a different resource
+                    clientWrapper = clientPool.getNextClient();
+                }
+            }
+        }
+    }
+    
+    return { success: false, error: lastError };
+}
+
+// =============================================================================
+// CLASSIFICATION
+// =============================================================================
+
+async function classifyInstance(instance, runNumber) {
+    const { id, localId, dataset, task, input } = instance;
+    const key = `${dataset}_${task}`;
+    
+    const systemPrompt = prompts[key];
+    const schema = schemas[key];
+    
+    if (!systemPrompt) {
+        console.error(`  ❌ Missing PROMPT for key: "${key}" (instance ${id})`);
+        console.error(`     Available: ${Object.keys(prompts).join(", ")}`);
+    }
+    if (!schema) {
+        console.error(`  ❌ Missing SCHEMA for key: "${key}" (instance ${id})`);
+        console.error(`     Available: ${Object.keys(schemas).join(", ")}`);
+    }
+    
+    if (!systemPrompt || !schema) {
+        return {
+            id: parseInt(id),
+            localId,
+            dataset,
+            task,
+            run: runNumber,
+            input,
+            output: null,
+            hasError: true,
+            error: `Missing ${!systemPrompt ? "prompt" : ""}${!systemPrompt && !schema ? " and " : ""}${!schema ? "schema" : ""} for key: ${key}`
+        };
+    }
+    
+    const startTime = Date.now();
+    const { success, response, error, resourceName } = await callWithRetry(systemPrompt, input, schema, id);
+    const endTime = Date.now();
+    
+    if (!success) {
+        return {
+            id: parseInt(id),
+            localId,
+            dataset,
+            task,
+            run: runNumber,
+            input,
+            output: null,
+            timestamp: Math.floor(Date.now() / 1000),
+            model: CONFIG.deployment,
+            seed: CONFIG.seed,
+            temperature: CONFIG.temperature,
+            fingerprint: null,
+            duration: (endTime - startTime) / 1000,
+            numInputTokens: null,
+            numOutputTokens: null,
+            logprobs: null,
+            hasError: true,
+            error: error?.message || "Unknown error"
+        };
+    }
+    
+    const choice = response.choices[0];
+    let outputParsed;
+    let parseError = null;
+    
+    try {
+        outputParsed = JSON.parse(choice.message.content);
+    } catch (e) {
+        console.error(`  JSON parse error for instance ${id}: ${e.message}`);
+        console.error(`  Raw content: ${choice.message.content}`);
+        outputParsed = choice.message.content;
+        parseError = e.message;
+    }
+    
+    return {
+        id: parseInt(id),
+        localId,
+        dataset,
+        task,
+        run: runNumber,
+        input,
+        output: outputParsed,
+        timestamp: response.created,
+        model: response.model,
+        seed: CONFIG.seed,
+        temperature: CONFIG.temperature,
+        fingerprint: response.system_fingerprint,
+        resource: resourceName,  // Track which resource was used
+        duration: parseFloat(((endTime - startTime) / 1000).toFixed(3)),
+        numInputTokens: response.usage.prompt_tokens,
+        numOutputTokens: response.usage.completion_tokens,
+        logprobs: choice.logprobs.content,
+        hasError: parseError !== null,
+        error: parseError
+    };
+}
+
+// =============================================================================
+// BATCH PROCESSING
+// =============================================================================
+
+async function processBatch(instances, runNumber, outputPath, existingResults) {
+    const tasks = instances.map(async (instance) => {
+        const result = await classifyInstance(instance, runNumber);
+        
+        const existingErrorIndex = existingResults.all.findIndex(
+            r => r.id === result.id && r.hasError
+        );
+        
+        if (existingErrorIndex >= 0) {
+            existingResults.all[existingErrorIndex] = result;
+            writeAllResults(outputPath, existingResults.all);
+            console.log(`  [${result.id}] Replaced error -> ${result.hasError ? "ERROR" : "OK"}`);
+        } else {
+            appendResult(outputPath, result);
+            existingResults.all.push(result);
+            const status = result.hasError ? "ERROR" : "OK";
+            console.log(`  [${result.id}] ${result.dataset}_${result.task} ${status} (${result.duration}s) [${result.resource || '-'}]`);
+        }
+        
+        if (result.hasError) {
+            existingResults.errors.add(result.id);
+            existingResults.completed.delete(result.id);
+        } else {
+            existingResults.completed.add(result.id);
+            existingResults.errors.delete(result.id);
+        }
+        
+        return result;
+    });
+    
+    return await Promise.all(tasks);
+}
+
+// =============================================================================
+// MAIN EXECUTION
+// =============================================================================
+
+async function executeRun(instances, runNumber, outputPath) {
+    console.log(`\n${"=".repeat(60)}`);
+    console.log(`RUN ${runNumber}`);
+    console.log(`${"=".repeat(60)}`);
+    
+    const existingResults = loadExistingResults(outputPath);
+    
+    const toProcess = instances.filter(inst => {
+        const id = parseInt(inst.id);
+        return !existingResults.completed.has(id) || existingResults.errors.has(id);
+    });
+    
+    console.log(`\nTotal instances: ${instances.length}`);
+    console.log(`Already completed: ${existingResults.completed.size}`);
+    console.log(`Previous errors to retry: ${existingResults.errors.size}`);
+    console.log(`To process this session: ${toProcess.length}\n`);
+    
+    if (toProcess.length === 0) {
+        console.log(`Run ${runNumber} already complete!`);
+        return;
+    }
+    
+    let consecutiveErrors = 0;
+    const totalBatches = Math.ceil(toProcess.length / CONFIG.batchSize);
+    const runStartTime = Date.now();
+    
+    for (let i = 0; i < toProcess.length; i += CONFIG.batchSize) {
+        const batchNum = Math.floor(i / CONFIG.batchSize) + 1;
+        const batch = toProcess.slice(i, i + CONFIG.batchSize);
+        
+        // Progress estimate
+        const elapsed = (Date.now() - runStartTime) / 1000 / 60;
+        const rate = i > 0 ? i / elapsed : 0;
+        const remaining = rate > 0 ? (toProcess.length - i) / rate : 0;
+        
+        console.log(`\n--- Batch ${batchNum}/${totalBatches} (${batch.length} instances) | ~${remaining.toFixed(1)} min remaining ---`);
+        
+        const results = await processBatch(batch, runNumber, outputPath, existingResults);
+        
+        const batchErrors = results.filter(r => r.hasError).length;
+        if (batchErrors === batch.length) {
+            consecutiveErrors += batchErrors;
+            console.warn(`\n⚠️  All ${batchErrors} in batch failed!`);
+            
+            if (consecutiveErrors >= CONFIG.consecutiveErrorsBeforePause) {
+                console.warn(`\n🛑 ${consecutiveErrors} consecutive errors. Pausing for 10 minutes...`);
+                await sleep(CONFIG.longPauseDelay);
+                consecutiveErrors = 0;
+            }
+        } else {
+            consecutiveErrors = 0;
+        }
+        
+        if (i + CONFIG.batchSize < toProcess.length) {
+            await sleep(CONFIG.delayBetweenBatches);
+        }
+    }
+    
+    // Final summary
+    const finalState = loadExistingResults(outputPath);
+    
+    let totalInputTokens = 0;
+    let totalOutputTokens = 0;
+    for (const r of finalState.all) {
+        if (r.numInputTokens) totalInputTokens += r.numInputTokens;
+        if (r.numOutputTokens) totalOutputTokens += r.numOutputTokens;
+    }
+    const avgTokens = finalState.completed.size > 0 
+        ? Math.round((totalInputTokens + totalOutputTokens) / finalState.completed.size)
+        : 0;
+    
+    console.log(`\n--- Run ${runNumber} Summary ---`);
+    console.log(`Completed: ${finalState.completed.size}/${instances.length}`);
+    console.log(`Errors: ${finalState.errors.size}`);
+    console.log(`Tokens: ${totalInputTokens.toLocaleString()} in + ${totalOutputTokens.toLocaleString()} out = ${(totalInputTokens + totalOutputTokens).toLocaleString()} total`);
+    console.log(`Avg tokens/request: ${avgTokens}`);
+    
+    clientPool.printStats();
+}
+
+async function main() {
+    const args = process.argv.slice(2);
+    const startRun = parseInt(args[0]) || 1;
+    const endRun = parseInt(args[1]) || startRun;
+    
+    console.log(`\n${"=".repeat(60)}`);
+    console.log(`LLM CLASSIFICATION STABILITY STUDY`);
+    console.log(`${"=".repeat(60)}`);
+    console.log(`Model: ${CONFIG.deployment}`);
+    console.log(`Temperature: ${CONFIG.temperature}`);
+    console.log(`Seed: ${CONFIG.seed}`);
+    console.log(`Batch size: ${CONFIG.batchSize}`);
+    console.log(`Resources: ${clientPool.clients.length}`);
+    console.log(`Runs: ${startRun} to ${endRun}`);
+    console.log(`Start time: ${new Date().toISOString()}`);
+    
+    const scriptDir = __dirname;
+    const dataPath = path.join(scriptDir, CONFIG.dataDir, CONFIG.inputFile);
+    const outputDir = path.join(scriptDir, CONFIG.outputDir);
+    
+    if (!fs.existsSync(outputDir)) {
+        fs.mkdirSync(outputDir, { recursive: true });
+    }
+    
+    const instances = loadInstances(dataPath);
+    
+    // Show breakdown
+    const breakdown = {};
+    for (const inst of instances) {
+        const key = `${inst.dataset}_${inst.task}`;
+        breakdown[key] = (breakdown[key] || 0) + 1;
+    }
+    console.log(`\nDataset/Task breakdown:`);
+    for (const [key, count] of Object.entries(breakdown).sort()) {
+        console.log(`  ${key}: ${count} instances`);
+    }
+    
+    const startTime = Date.now();
+    
+    for (let run = startRun; run <= endRun; run++) {
+        const outputPath = path.join(outputDir, `run_${String(run).padStart(3, "0")}.jsonl`);
+        await executeRun(instances, run, outputPath);
+    }
+    
+    const totalMinutes = (Date.now() - startTime) / 1000 / 60;
+    
+    console.log(`\n${"=".repeat(60)}`);
+    console.log(`ALL DONE`);
+    console.log(`End time: ${new Date().toISOString()}`);
+    console.log(`Total time: ${totalMinutes.toFixed(1)} minutes`);
+    clientPool.printStats();
+    console.log(`${"=".repeat(60)}\n`);
+}
+
+main().catch(err => {
+    console.error("Fatal error:", err);
+    process.exit(1);
+});

@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JSONL Diagnostic Viewer</title>
+    <style>
+        * { box-sizing: border-box; }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        
+        h1 { margin: 0 0 20px 0; color: #333; }
+        
+        .controls {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .drop-zone {
+            border: 2px dashed #ccc;
+            border-radius: 8px;
+            padding: 30px;
+            text-align: center;
+            color: #666;
+            margin-bottom: 15px;
+            transition: all 0.2s;
+        }
+        
+        .drop-zone.dragover {
+            border-color: #1976d2;
+            background: #e3f2fd;
+        }
+        
+        .drop-zone input[type="file"] {
+            display: none;
+        }
+        
+        .drop-zone label {
+            cursor: pointer;
+            color: #1976d2;
+            text-decoration: underline;
+        }
+        
+        .loaded-files {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+        }
+        
+        .file-chip {
+            background: #e3f2fd;
+            padding: 4px 12px;
+            border-radius: 16px;
+            font-size: 0.85em;
+            color: #1976d2;
+            cursor: pointer;
+        }
+        
+        .file-chip.active {
+            background: #1976d2;
+            color: white;
+        }
+        
+        .file-chip:hover {
+            opacity: 0.8;
+        }
+        
+        .summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .stat-card .value {
+            font-size: 1.4em;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .stat-card .label {
+            color: #666;
+            font-size: 0.8em;
+        }
+        
+        .stat-card.errors .value { color: #e74c3c; }
+        .stat-card.success .value { color: #27ae60; }
+        .stat-card.cost .value { color: #9c27b0; }
+        .stat-card.time .value { color: #ff5722; }
+        
+        .filters {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            align-items: center;
+        }
+        
+        .filters label { display: flex; align-items: center; gap: 5px; }
+        .filters select, .filters input { padding: 5px 10px; }
+        
+        .results {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .result-card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .result-card.error { border-left: 4px solid #e74c3c; }
+        .result-card.success { border-left: 4px solid #27ae60; }
+        
+        .result-header {
+            padding: 12px 15px;
+            background: #fafafa;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+        }
+        
+        .result-header:hover { background: #f0f0f0; }
+        
+        .result-id { font-weight: bold; font-size: 1em; }
+        
+        .result-meta {
+            display: flex;
+            gap: 10px;
+            color: #666;
+            font-size: 0.8em;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        
+        .result-meta span {
+            padding: 2px 8px;
+            border-radius: 4px;
+        }
+        
+        .result-meta .dataset { background: #e3f2fd; color: #1976d2; }
+        .result-meta .task { background: #f3e5f5; color: #7b1fa2; }
+        .result-meta .error-badge { background: #ffebee; color: #c62828; }
+        .result-meta .tokens { background: #e8f5e9; color: #2e7d32; }
+        .result-meta .cost { background: #fff3e0; color: #e65100; }
+        .result-meta .output-val { background: #e0f2f1; color: #00695c; font-weight: bold; }
+        
+        .result-body { padding: 15px; display: none; }
+        .result-card.expanded .result-body { display: block; }
+        
+        .result-section { margin-bottom: 15px; }
+        
+        .result-section h4 {
+            margin: 0 0 8px 0;
+            color: #555;
+            font-size: 0.9em;
+            text-transform: uppercase;
+        }
+        
+        .result-section pre {
+            background: #f5f5f5;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+            margin: 0;
+            font-size: 0.85em;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .result-section .text-content {
+            background: #fffde7;
+            padding: 10px;
+            border-radius: 4px;
+            border-left: 3px solid #ffc107;
+            white-space: pre-wrap;
+        }
+        
+        .result-section .error-content {
+            background: #ffebee;
+            padding: 10px;
+            border-radius: 4px;
+            border-left: 3px solid #e74c3c;
+            color: #c62828;
+        }
+        
+        .classification-output {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .classification-output .field {
+            background: #e8f5e9;
+            padding: 10px 15px;
+            border-radius: 4px;
+            text-align: center;
+            min-width: 80px;
+        }
+        
+        .classification-output .field .key {
+            font-size: 0.75em;
+            color: #666;
+            text-transform: uppercase;
+        }
+        
+        .classification-output .field .val {
+            font-size: 1.4em;
+            font-weight: bold;
+            color: #2e7d32;
+        }
+        
+        .collapsible-header {
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            user-select: none;
+        }
+        
+        .collapsible-header:hover { color: #1976d2; }
+        .collapsible-header .toggle-icon { transition: transform 0.2s; }
+        .collapsible-header.open .toggle-icon { transform: rotate(90deg); }
+        
+        .collapsible-content { display: none; margin-top: 8px; }
+        .collapsible-content.open { display: block; }
+        
+        .logprobs-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.8em;
+        }
+        
+        .logprobs-table th, .logprobs-table td {
+            padding: 6px 8px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .logprobs-table th { background: #f5f5f5; position: sticky; top: 0; }
+        .logprobs-table .rank-col { width: 40px; text-align: center; }
+        .logprobs-table .selected-row { background: #e8f5e9; font-weight: bold; }
+        
+        .prob-bar {
+            display: inline-block;
+            height: 8px;
+            background: #4caf50;
+            border-radius: 4px;
+            margin-right: 5px;
+            vertical-align: middle;
+        }
+        
+        .prob-bar.low { background: #ff9800; }
+        .prob-bar.very-low { background: #f44336; }
+        
+        .alternatives-scroll { max-height: 350px; overflow-y: auto; }
+        
+        .key-token-box {
+            background: #e3f2fd;
+            border: 2px solid #1976d2;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .key-token-box h4 { margin: 0 0 10px 0; color: #1976d2; }
+        
+        .key-token-info {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 5px 15px;
+            font-size: 0.9em;
+        }
+        
+        .key-token-info dt { font-weight: bold; color: #555; }
+        .key-token-info dd { margin: 0; }
+        
+        #noData {
+            text-align: center;
+            padding: 50px;
+            color: #666;
+        }
+        
+        .expand-btn {
+            background: none;
+            border: none;
+            font-size: 1em;
+            cursor: pointer;
+            padding: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔍 JSONL Diagnostic Viewer</h1>
+    
+    <div class="controls">
+        <div class="drop-zone" id="dropZone">
+            <p>Drag & drop .jsonl files here, or <label for="fileInput">browse</label></p>
+            <input type="file" id="fileInput" accept=".jsonl,.json" multiple>
+        </div>
+        <div class="loaded-files" id="loadedFiles"></div>
+    </div>
+    
+    <div id="noData">
+        <p>Load one or more .jsonl files to inspect results</p>
+        <p style="font-size: 0.9em; color: #999;">Tip: You can load multiple run files and switch between them</p>
+    </div>
+    
+    <div id="content" style="display: none;">
+        <div class="summary" id="summary"></div>
+        
+        <div class="filters">
+            <label>
+                Show:
+                <select id="filterStatus">
+                    <option value="all">All</option>
+                    <option value="errors">Errors Only</option>
+                    <option value="success">Success Only</option>
+                </select>
+            </label>
+            <label>
+                Dataset:
+                <select id="filterDataset">
+                    <option value="all">All</option>
+                </select>
+            </label>
+            <label>
+                Task:
+                <select id="filterTask">
+                    <option value="all">All</option>
+                </select>
+            </label>
+            <label>
+                Search ID:
+                <input type="text" id="searchId" placeholder="e.g. 42" style="width: 80px;">
+            </label>
+            <label>
+                Key Token Position:
+                <input type="number" id="keyTokenPos" value="3" min="0" max="20" style="width: 60px;">
+            </label>
+        </div>
+        
+        <div class="results" id="results"></div>
+    </div>
+    
+    <script>
+        // GPT-4o pricing (USD per 1K tokens)
+        const PRICING = {
+            input: 0.0025,   // $2.50 per 1M input
+            output: 0.01    // $10.00 per 1M output
+        };
+        
+        let allFiles = {};  // filename -> data array
+        let currentFile = null;
+        let data = [];
+        
+        // Drag and drop
+        const dropZone = document.getElementById('dropZone');
+        
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.classList.add('dragover');
+        });
+        
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.classList.remove('dragover');
+        });
+        
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('dragover');
+            handleFiles(e.dataTransfer.files);
+        });
+        
+        document.getElementById('fileInput').addEventListener('change', (e) => {
+            handleFiles(e.target.files);
+        });
+        
+        async function handleFiles(files) {
+            for (const file of files) {
+                if (!file.name.endsWith('.jsonl') && !file.name.endsWith('.json')) continue;
+                
+                const text = await file.text();
+                const lines = text.trim().split('\n').filter(l => l.length > 0);
+                const records = [];
+                
+                for (const line of lines) {
+                    try {
+                        records.push(JSON.parse(line));
+                    } catch (err) {
+                        console.warn(`Could not parse line in ${file.name}`);
+                    }
+                }
+                
+                allFiles[file.name] = records;
+            }
+            
+            updateFileChips();
+            
+            // Auto-select first file if none selected
+            if (!currentFile && Object.keys(allFiles).length > 0) {
+                selectFile(Object.keys(allFiles)[0]);
+            }
+        }
+        
+        function updateFileChips() {
+            const container = document.getElementById('loadedFiles');
+            container.innerHTML = Object.keys(allFiles).sort().map(name => 
+                `<span class="file-chip ${name === currentFile ? 'active' : ''}" onclick="selectFile('${name}')">${name} (${allFiles[name].length})</span>`
+            ).join('');
+        }
+        
+        function selectFile(filename) {
+            currentFile = filename;
+            data = allFiles[filename] || [];
+            updateFileChips();
+            
+            document.getElementById('noData').style.display = 'none';
+            document.getElementById('content').style.display = 'block';
+            
+            populateFilters();
+            renderSummary();
+            renderResults();
+        }
+        
+        // Filters
+        document.getElementById('filterStatus').addEventListener('change', renderResults);
+        document.getElementById('filterDataset').addEventListener('change', renderResults);
+        document.getElementById('filterTask').addEventListener('change', renderResults);
+        document.getElementById('searchId').addEventListener('input', renderResults);
+        document.getElementById('keyTokenPos').addEventListener('change', renderResults);
+        
+        function calculateCost(inputTokens, outputTokens) {
+            if (!inputTokens && !outputTokens) return null;
+            return ((inputTokens || 0) * PRICING.input / 1000) + ((outputTokens || 0) * PRICING.output / 1000);
+        }
+        
+        function populateFilters() {
+            const datasets = [...new Set(data.map(d => d.dataset))].filter(Boolean).sort();
+            const tasks = [...new Set(data.map(d => d.task))].filter(Boolean).sort();
+            
+            const dsSelect = document.getElementById('filterDataset');
+            dsSelect.innerHTML = '<option value="all">All</option>' + 
+                datasets.map(ds => `<option value="${ds}">${ds}</option>`).join('');
+            
+            const taskSelect = document.getElementById('filterTask');
+            taskSelect.innerHTML = '<option value="all">All</option>' + 
+                tasks.map(t => `<option value="${t}">${t}</option>`).join('');
+        }
+        
+        function renderSummary() {
+            const total = data.length;
+            const errors = data.filter(d => d.hasError).length;
+            const success = total - errors;
+            const datasets = [...new Set(data.map(d => d.dataset))].filter(Boolean).length;
+            const tasks = [...new Set(data.map(d => d.task))].filter(Boolean).length;
+            
+            let totalInputTokens = 0, totalOutputTokens = 0, totalDuration = 0, validCount = 0;
+            let minTimestamp = Infinity, maxTimestamp = 0;
+            
+            for (const d of data) {
+                if (d.numInputTokens) totalInputTokens += d.numInputTokens;
+                if (d.numOutputTokens) totalOutputTokens += d.numOutputTokens;
+                if (d.duration) { totalDuration += d.duration; validCount++; }
+                if (d.timestamp) {
+                    minTimestamp = Math.min(minTimestamp, d.timestamp);
+                    maxTimestamp = Math.max(maxTimestamp, d.timestamp);
+                }
+            }
+            
+            const totalTokens = totalInputTokens + totalOutputTokens;
+            const totalCost = calculateCost(totalInputTokens, totalOutputTokens);
+            const avgDuration = validCount > 0 ? totalDuration / validCount : 0;
+            const fingerprints = [...new Set(data.map(d => d.fingerprint).filter(Boolean))];
+            
+            // Time range
+            const startTime = minTimestamp < Infinity ? new Date(minTimestamp * 1000).toLocaleString() : '-';
+            const endTime = maxTimestamp > 0 ? new Date(maxTimestamp * 1000).toLocaleString() : '-';
+            const durationMins = (maxTimestamp - minTimestamp) / 60;
+            
+            document.getElementById('summary').innerHTML = `
+                <div class="stat-card">
+                    <div class="value">${total}</div>
+                    <div class="label">Total</div>
+                </div>
+                <div class="stat-card success">
+                    <div class="value">${success}</div>
+                    <div class="label">Success</div>
+                </div>
+                <div class="stat-card errors">
+                    <div class="value">${errors}</div>
+                    <div class="label">Errors</div>
+                </div>
+                <div class="stat-card">
+                    <div class="value">${datasets}</div>
+                    <div class="label">Datasets</div>
+                </div>
+                <div class="stat-card">
+                    <div class="value">${tasks}</div>
+                    <div class="label">Tasks</div>
+                </div>
+                <div class="stat-card">
+                    <div class="value">${avgDuration.toFixed(2)}s</div>
+                    <div class="label">Avg Duration</div>
+                </div>
+                <div class="stat-card time">
+                    <div class="value">${totalDuration.toFixed(0)}s</div>
+                    <div class="label">Total Duration</div>
+                </div>
+                <div class="stat-card time">
+                    <div class="value">${durationMins > 0 ? durationMins.toFixed(1) + 'm' : '-'}</div>
+                    <div class="label">Run Time</div>
+                </div>
+                <div class="stat-card">
+                    <div class="value">${totalInputTokens.toLocaleString()}</div>
+                    <div class="label">Input Tok</div>
+                </div>
+                <div class="stat-card">
+                    <div class="value">${totalOutputTokens.toLocaleString()}</div>
+                    <div class="label">Output Tok</div>
+                </div>
+                <div class="stat-card">
+                    <div class="value">${totalTokens.toLocaleString()}</div>
+                    <div class="label">Total Tok</div>
+                </div>
+                <div class="stat-card cost">
+                    <div class="value">$${totalCost ? totalCost.toFixed(4) : '0'}</div>
+                    <div class="label">Total Cost</div>
+                </div>
+                <div class="stat-card">
+                    <div class="value">${fingerprints.length}</div>
+                    <div class="label">Fingerprints</div>
+                </div>
+            `;
+        }
+        
+        function getFilteredData() {
+            const status = document.getElementById('filterStatus').value;
+            const dataset = document.getElementById('filterDataset').value;
+            const task = document.getElementById('filterTask').value;
+            const searchId = document.getElementById('searchId').value.trim();
+            
+            return data.filter(d => {
+                if (status === 'errors' && !d.hasError) return false;
+                if (status === 'success' && d.hasError) return false;
+                if (dataset !== 'all' && d.dataset !== dataset) return false;
+                if (task !== 'all' && d.task !== task) return false;
+                if (searchId && String(d.id) !== searchId) return false;
+                return true;
+            });
+        }
+        
+        function getOutputValue(output) {
+            if (!output || typeof output !== 'object') return output;
+            // Return first value found (level, belief, promise, p1, etc.)
+            const keys = Object.keys(output);
+            if (keys.length === 1) return output[keys[0]];
+            // If multiple, return as "key1:val1, key2:val2"
+            return keys.map(k => `${k}:${output[k]}`).join(', ');
+        }
+        
+        function renderResults() {
+            const filtered = getFilteredData();
+            const keyTokenPos = parseInt(document.getElementById('keyTokenPos').value) || 3;
+            const container = document.getElementById('results');
+            
+            container.innerHTML = filtered.map(d => {
+                const cost = calculateCost(d.numInputTokens, d.numOutputTokens);
+                const totalTokens = (d.numInputTokens || 0) + (d.numOutputTokens || 0);
+                const outputVal = getOutputValue(d.output);
+                
+                return `
+                <div class="result-card ${d.hasError ? 'error' : 'success'}" data-id="${d.id}">
+                    <div class="result-header" onclick="toggleCard(${d.id})">
+                        <div class="result-id">ID: ${d.id}</div>
+                        <div class="result-meta">
+                            <span class="dataset">${d.dataset || '-'}</span>
+                            <span class="task">${d.task || '-'}</span>
+                            ${!d.hasError && outputVal ? `<span class="output-val">${outputVal}</span>` : ''}
+                            <span>${d.duration ? d.duration.toFixed(2) + 's' : '-'}</span>
+                            <span class="tokens">${totalTokens} tok</span>
+                            <span class="cost">$${cost ? cost.toFixed(5) : '0'}</span>
+                            ${d.hasError ? '<span class="error-badge">ERROR</span>' : ''}
+                            <button class="expand-btn">▼</button>
+                        </div>
+                    </div>
+                    <div class="result-body">
+                        ${d.error ? `
+                            <div class="result-section">
+                                <h4>Error</h4>
+                                <div class="error-content">${escapeHtml(d.error)}</div>
+                            </div>
+                        ` : ''}
+                        
+                        <div class="result-section">
+                            <h4>Input</h4>
+                            <div class="text-content">${escapeHtml(d.input || d.text || '-')}</div>
+                        </div>
+                        
+                        ${d.localId ? `
+                            <div class="result-section">
+                                <h4>Local ID (from source dataset)</h4>
+                                <pre>${escapeHtml(d.localId)}</pre>
+                            </div>
+                        ` : ''}
+                        
+                        ${d.output ? `
+                            <div class="result-section">
+                                <h4>Classification Output</h4>
+                                <div class="classification-output">
+                                    ${typeof d.output === 'object' ? 
+                                        Object.entries(d.output).map(([k, v]) => `
+                                            <div class="field">
+                                                <div class="key">${k}</div>
+                                                <div class="val">${v}</div>
+                                            </div>
+                                        `).join('') : 
+                                        `<pre>${escapeHtml(String(d.output))}</pre>`
+                                    }
+                                </div>
+                            </div>
+                        ` : ''}
+                        
+                        ${d.logprobs && d.logprobs.length > keyTokenPos ? `
+                            <div class="result-section">
+                                <h4>Key Token (Position ${keyTokenPos})</h4>
+                                ${renderKeyTokenLogprobs(d.logprobs[keyTokenPos])}
+                            </div>
+                        ` : ''}
+                        
+                        ${d.logprobs && d.logprobs.length > 0 ? `
+                            <div class="result-section">
+                                <h4 class="collapsible-header" onclick="toggleCollapsible(this)">
+                                    <span class="toggle-icon">▶</span>
+                                    All Token Logprobs (${d.logprobs.length} tokens)
+                                </h4>
+                                <div class="collapsible-content">
+                                    ${renderAllLogprobs(d.logprobs)}
+                                </div>
+                            </div>
+                        ` : ''}
+                        
+                        <div class="result-section">
+                            <h4>Metadata</h4>
+                            <pre>${JSON.stringify({
+                                timestamp: d.timestamp ? new Date(d.timestamp * 1000).toISOString() : null,
+                                model: d.model,
+                                fingerprint: d.fingerprint,
+                                seed: d.seed,
+                                temperature: d.temperature,
+                                tokens: { input: d.numInputTokens, output: d.numOutputTokens, total: totalTokens },
+                                cost: cost ? '$' + cost.toFixed(6) : null
+                            }, null, 2)}</pre>
+                        </div>
+                        
+                        <div class="result-section">
+                            <h4 class="collapsible-header" onclick="toggleCollapsible(this)">
+                                <span class="toggle-icon">▶</span>
+                                Full Raw Data
+                            </h4>
+                            <div class="collapsible-content">
+                                <pre>${escapeHtml(JSON.stringify(d, null, 2))}</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `}).join('');
+        }
+        
+        function renderKeyTokenLogprobs(tokenData) {
+            if (!tokenData) return '<p>No logprob data for this position</p>';
+            
+            const selectedToken = tokenData.token;
+            const selectedLogprob = tokenData.logprob;
+            const selectedProb = Math.exp(selectedLogprob);
+            
+            let allAlternatives = [{
+                token: selectedToken,
+                logprob: selectedLogprob,
+                prob: selectedProb,
+                isSelected: true
+            }];
+            
+            if (tokenData.top_logprobs) {
+                for (const alt of tokenData.top_logprobs) {
+                    if (alt.token !== selectedToken) {
+                        allAlternatives.push({
+                            token: alt.token,
+                            logprob: alt.logprob,
+                            prob: Math.exp(alt.logprob),
+                            isSelected: false
+                        });
+                    }
+                }
+            }
+            
+            allAlternatives.sort((a, b) => b.prob - a.prob);
+            
+            let html = `
+                <div class="key-token-box">
+                    <h4>Selected: "${escapeHtml(selectedToken)}"</h4>
+                    <dl class="key-token-info">
+                        <dt>Probability:</dt><dd>${(selectedProb * 100).toFixed(4)}%</dd>
+                        <dt>Log Prob:</dt><dd>${selectedLogprob.toFixed(6)}</dd>
+                    </dl>
+                </div>
+                <p><strong>All ${allAlternatives.length} alternatives:</strong></p>
+                <div class="alternatives-scroll">
+                <table class="logprobs-table">
+                    <thead><tr><th class="rank-col">#</th><th>Token</th><th>Log Prob</th><th>Probability</th></tr></thead>
+                    <tbody>
+            `;
+            
+            for (let i = 0; i < allAlternatives.length; i++) {
+                const alt = allAlternatives[i];
+                const probPct = alt.prob * 100;
+                const barWidth = Math.max(1, probPct * 2);
+                let barClass = probPct < 1 ? 'very-low' : probPct < 10 ? 'low' : '';
+                
+                html += `
+                    <tr class="${alt.isSelected ? 'selected-row' : ''}">
+                        <td class="rank-col">${i + 1}</td>
+                        <td><code>${escapeHtml(alt.token)}</code>${alt.isSelected ? ' ✓' : ''}</td>
+                        <td>${alt.logprob.toFixed(6)}</td>
+                        <td><span class="prob-bar ${barClass}" style="width:${barWidth}px"></span>${probPct.toFixed(4)}%</td>
+                    </tr>
+                `;
+            }
+            
+            return html + '</tbody></table></div>';
+        }
+        
+        function renderAllLogprobs(logprobs) {
+            if (!logprobs || logprobs.length === 0) return '<p>No logprobs</p>';
+            
+            let html = '<div class="alternatives-scroll"><table class="logprobs-table"><thead><tr><th>Pos</th><th>Token</th><th>LogP</th><th>Prob</th><th>Top Alternatives</th></tr></thead><tbody>';
+            
+            for (let i = 0; i < logprobs.length; i++) {
+                const lp = logprobs[i];
+                const prob = Math.exp(lp.logprob);
+                
+                let alts = '';
+                if (lp.top_logprobs) {
+                    alts = lp.top_logprobs.slice(0, 5).map(alt => 
+                        `${escapeHtml(alt.token)}(${(Math.exp(alt.logprob) * 100).toFixed(1)}%)`
+                    ).join(', ');
+                }
+                
+                html += `<tr><td>${i}</td><td><code>${escapeHtml(lp.token)}</code></td><td>${lp.logprob.toFixed(4)}</td><td>${(prob * 100).toFixed(2)}%</td><td style="font-size:0.75em;color:#666;">${alts}</td></tr>`;
+            }
+            
+            return html + '</tbody></table></div>';
+        }
+        
+        function toggleCard(id) {
+            document.querySelector(`.result-card[data-id="${id}"]`).classList.toggle('expanded');
+        }
+        
+        function toggleCollapsible(header) {
+            header.classList.toggle('open');
+            header.nextElementSibling.classList.toggle('open');
+        }
+        
+        function escapeHtml(str) {
+            if (!str) return '';
+            return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+        }
+    </script>
+</body>
+</html>

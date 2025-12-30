@@ -1,0 +1,79 @@
+message.id,level,belief,message,ra.lb,ra.ub,ra.belief,decision
+1,1,46-55,i think most people will go for 50? So the average will be about 35?,1,1,46-55,35
+2,1,46-55,"If 50 were average, 2/3rds would be around 33. I would imagine the average to be above 50, and therefore guess around 39.Realisitically the answer will be between 33-66.So maybe higher than 39? Perhaps 43",1,1,56-65,43
+3,2,46-55,"Hey partner:) I am doing econs 2nd year, we've studied this experiment on our lectures let me just explain to you how it works: the average of all scores will ve centred arond 50, then if we multiply it by 2/3 it will give 33.3. HOWEVER, note that 33 is the number that most people will put, because they can calculate up to that point. YET whan majority fails to foresee is that if everyone puts 33, then the real target average is 22!and that's the number we should put in.",2,2,46-55,22
+4,1,56-65,"60 seems close to the average between the number of 0 to 100, and i guess more people will choose the average no.",0,0,56-65,60
+5,0,none,60,0,0,none,60
+6,1,56-65,"I am not an economist, but I'm looking at at whole I think the avearge maybe around 60. Therefore, 40 would be the two thirds of this it also seems reasonable.",1,1,56-65,40
+7,1,26-35,I would guess that the majority of people would pick a number in the lower stratum. Say 25 or 30 the two thirds average of this is around 15,1,2,none,15
+8,1,46-55,"As the range of numbers is between 0 - 100, I think most of guys might be choosing a number close to 50, and since the two thirds of the average is choosen, the target number may be nearer to 40. it's just my thinking. Not sure really in this way this round works.. Waiting to see your suggested decision and then I will take a decision. Cheers.",1,1,46-55,50
+9,0,none,guess,0,0,none,16
+10,1,56-65,Considering it will calculate two thirds of the average.. wouldn't 60 be highly possible? It looks ideal for me. Any suggestions?,0,1,56-65,60
+11,0,none,I guess a safe way would be to have one choose a low number lets say between 20 and 50 and the other between 50 and 80 .. your suggestions?,0,0,none,40
+12,0,none,"I think it will be a rather low number, definitially below 50.",0,1,none,41
+13,2,46-55,lets say everyone thinks the average will be 50 based on random probabilityand 2/3rds of that will be about 34hence they will mostly be choosing around 34 onlymaking the average 34and its 2/3rd to be around 21,2,2,46-55,21
+15,2,46-55,say most of the people will say around 40 seomthing because they think that will be the 2/3 of the average. People thing the average will be around 50 or 60 so they get 2/3 of that that will be around 40 but if everyone does then the 2/3 of 40 will be less si i say it will be around 32 or so...,2,2,46-55,32
+17,0,none,because it is relatively close to the middle?,0,0,none,42
+18,0,none,"it's quite random, so just guess",0,0,none,58
+19,1,66-75,Well. i suppose mopst of the  eld will choose big numbers so that average will go up to 60-70. 2/3 of this number would be in range of 40-45,1,1,56-65,42
+20,0,none,i just used 50 which is the average of 0 and 100.,0,0,none,50
+21,-1,none,"Theory says that we should play 0, as everyone will always try to beat everyone else by goingtwo thirdsless until everyone reaches 0. Whether everyone will follow this reasoning I don't know; it maybe better to bida bit higher since not everyone may choose 0.",-1,-1,none,20
+22,1,46-55,"the target will be 50, so i chose 75, of whose (2/3) would be 50",0,1,46-55,75
+24,1,46-55,"Assuming that the overall total of the 6 teams is around 300, giving an average of about 50 iwould suggest 32 as a decision since some may tend above 50 while others below iti think the average will be around about 50 in which case we should submit an answer of about32 or 33",1,1,46-55,32
+25,0,none,"I'm no mathematician so I don't know what number to go for exactly which would give thegreatest chace*chanceso I'm just going with 50, unless you have a di erent tacticIf you're not sure either I will just go with 50 still",0,0,none,50
+26,1,46-55,I would give a small number as I think most people will go with number over 50+. I would gowith 22,1,1,none,22
+27,1,46-55,"I thought i'd go for 26as we're aiming for 2/3rds of an average, which should be about 21if everyone aims for '50' or something around '50'The remianing 5 (21+5) would account for any deviations in the groupI think it's unlikely that anyone will choose numbers close to 0 or 100hence my decision",1,1,46-55,26
+28,1,66-75,"As our target is two-thirds of the average, we should call for the number which is lower than 66.I think 40 is a quite safe line, but possibly be reduced to 30s?",1,1,none,40
+29,1,46-55,"to be honest i have little directed thought about thisbut...say the average is 50, then two thirds of 50 is around mid-30si think?either way it's my lucky number!wow sorry thats not more helpful.i'll see what you've said though.. will probably make more sense!",1,1,46-55,34
+30,1,46-55,Between 35 and 40 because 2/3 of the average case number 50 would be 38.But it might be less if everyone is guessing lower,1,2,46-55,38
+31,-2,none,test. whats Yours?,0,0,none,61
+32,1,66-75,"I suggest 66, because there are 6 teams each of them choosing a random number from 0 to 100then the average is found by adding those and dividing the sum by 6.Since we don't know the average in advnace let's assume 2/3 from 66 is 44",1,1,66-75,44
+33,1,none,normally people will choose the number 10-90 I think but I not surejust use your  rst reection to think about other people,1,2,46-55,65
+34,0,none,"Hi there, I've just won last 2 test period's questions, what I did was i wrote a few reasons and give a number and this guess answer is bit further than the  nal answerfurther i mean and i chose the one in the middle well, not exactly in the middle, something like a little to the left and a little to the right however I won the last 2 rounds that i didn't get anything, I guess I am not going to win this, lolI am just being pestmistici think 50 is nash equilibrium, and i will choose one is between yours and mine it's best if you chose something in the middle as well as this is how I found for the last 2 rounds i mean won not found :P This is how i won the last 2 rounds hope this one will work... but this one is fully random I think people like big numbers, and a few will chose 50%because rationally this is where it is highly possible if they are rational but i like big numbers because wining 10 pounds makes me feel putting big numbers that's how I feel, and decision is totally up to you:) take care",0,0,none,52
+35,0,none,"i do not have a suggested decision as it is not based on any logic .. i cannot predict what theother teams will play and cannot  gure out how to work out what would be the best decision tomake.if you have any better ideas, i am willing to take your adviceif you dont have any better ideas, then i guess we will just be lucky..or not..",0,0,none,77
+36,2,36-45,"the problem is that we have to be BELOW the assumed average - which is tricky cos how shouldwe know? lets think about what's going on in ppl's minds: they're all facing the same question,so i reckon they'll go for ratherso lets try being below that as well and do something like 25 or maybe even 20 which would betwo thirds of their 30-40",2,2,46-55,23
+38,2,46-55,"I reckon most people will assume an average of 50 so go for 36 or 37 (2/3 of 50) so I suggestwe go for 2/3 of their guesses, say 25",2,2,46-55,25
+39,0,none,Random.,0,0,none,56
+40,-2,none,I think the result depends on others decision,1,1,none,28
+42,0,none,i dont really get it. any suggestions,0,0,none,60
+43,1,46-55,the average number goes toward the 50 if the participants are so many.even if the number of pariticipants is just 16but i suggest this number.,0,1,none,43
+44,1,66-75,"Two thirds of 75 is 50, but I think other people will choose this, as this is an easy number.I do not think other people will think of 90 straight away.",0,0,none,90
+45,1,66-75,"66 is two thirds, many may go for this number, for the connection.",0,1,none,66
+46,1,46-55,I think that the average would be 50 and 2/3 of 50 is about 32,1,1,46-55,32
+47,1,46-55,Hopefully the average should be about 50 because all the teams will choose a random numberand 35 is about 2/3 of 50,1,1,46-55,35
+48,1,none,i would go for something high as it is unlikely that lots of people will go for something very lowand so that means we more likely to get closer to the averagebut im not sure really! that would be my suggestion,0,1,none,82
+49,1,46-55,"I don't really know if there's a structure to this, so am picking a number that is close to twothirds of the half of 100.",0,1,none,36
+50,0,none,88 is the year I was born and my lucky number. So this is my suggested decision,0,0,none,88
+51,0,none,I don't understand! :-S,-2,-2,none,40
+52,1,46-55,people may just go for half of one hundred because its like half way...numbers like 67 or 34 areless likely to be chosenmaybe?,0,1,46-55,50
+69,0,none,57,-2,-2,none,57
+70,0,none,what do you think?,-2,-2,none,38
+71,1,46-55,"well i guess the average will be about 50-60, so this is roughly down to two thirds, what do yousay? :)",1,1,46-55,25
+72,0,26-35,"I think it is more possilbe around 30, and it should be less than 50 I think.",-2,-2,none,30
+73,1,56-65,"I think there's got to be at least 8 or 9 teams, so I reckon thats got to come to at least 500 intotal, the average of which would be about 55-60, which gives 40 as two thirds of it.So I say we go for between 40 and 50",1,1,56-65,45
+74,0,none,it is better to take a high number in order to have a reduced choice for the  nal decision,-2,-2,none,72
+76,2,46-55,"I think everyone will aim for a two-thirds number of less than 50, so the target number of whateveryone actually picks will be much lower! I think it'll be less than 30. As everyone will bepicking low numbers to allow for this. so i think 16",2,3,none,16
+77,1,46-55,"Average should be around 50 but I can't tell if it actually will be, 2/3s of 50 is about 34. So Ithink 34 is a good startI'm going with 34",1,1,46-55,34
+78,1,46-55,"If the answer is going to be two thirds of the average, it cannot be above 66 as this is two thirdsof 99I think most people will work that out and go for something around 50 ish, so I think 30-40 willget us in the right area",1,2,none,35
+79,2,66-75,"provided that a number of people will go for answer of 2/3s of a 100 (66) then we should go forananswer that is 2/3's of that (44), however, i suggest we scale the number down slightly if otherteams dothe same as ourselves, therefore I suggest 38. I am open to your theory",2,3,76-100,38
+80,1,46-55,i think a number around this number will possible give us the right ans as most people willchoose above 50,0,1,none,86
+81,3,46-55,i guess if most people assume the teams average will be 50 then they will expect (2/3) to beaprox 33 and thiss will be their guesswhich would mean our guess should be 22however if other people assume the same then (2/3) average will be more like 7want to go with somewhere in the middle...# 12?,3,3,46-55,12
+82,1,46-55,I worked on an average of 50 and then looked at two thirds and added on a bit for luck!,1,1,46-55,40
+83,1,46-55,"most people willchoose a number under 50, but not too low, so I reckon it might be somewherein the region of 26:0 not entirely certain though!",1,1,none,26
+84,0,none,"The larger the number, the more likely we can predict the answer later.",-2,-2,none,100
+99,1,46-55,"i think that the average number will be from 50 to 60, therefore 2/3 of this will be around 32 to40. so i chose 35",1,1,46-55,35
+100,1,76-100,"I'm assuming everyone will choose a large number.If we choose very large numbers, i.e 90 and above, it will severely increase the overall averagemaking it less likely that the overall average can be below 40, at least.Hopefully, this works in practice as well as in theory.",0,0,none,100
+101,2,56-65,"i think most people will pick a number around 2/3rds of 100, but if this is so, 2/3rds of 60 willbe around 40.but then again, if everyone is thinkin glike this then the average will be rougly 30, so im notsure! but im going to go with 40.",2,3,66-75,40
+102,0,0-15,"lets all pic 0!! if we pick 0 the averge is 0, our targer number is 0, and 2/3rds of 0 is 0!! wecannot lose!!!!!think about it keep it simeple. go 0!!!!",-1,-1,none,0
+103,1,none,"if people are varied from 0 to 100, the target number would be around 30,That answer would be the best way to be logical because we cannot guratee all the other's numberIf you have any prefency that they would prefer big number, that will be higher than 33, on else,will be below 30",1,1,none,33
+104,2,66-75,I reckon the average will be players saying 66/100 approx due to it being two thirds.I believe we should say two thirds of that number which would range between 40 and 50The lower range will probably be a wiser move as a few others will estimate lower.Personally i would be happy with anything between 38-42.,2,3,76-100,38
+105,1,46-55,Every tries to guess the two-thirds of the average.If every one choose randomly from 0 {100 then the average would be 50then the two-thirds would be about 33so I would guess 33I am a Mathematican,1,1,46-55,33
+106,1,none,Perhaps around 30 would be the safest bet?Because it's going to be 2/3 of the average... just an idea. i dont really have any mathimaticalcalculationsaround the suggestion.If you do.. I will follow your lead.,1,1,36-45,35
+107,2,46-55,I think that most team players will say a number under 50 because every team contributes onenumber from the average of all teams 2/3 are taken. So everyone wil think that it is most likelyto be something under 50 and even less because whatever number it is 1/3 will fall away.I think it will be 18 because the average will be around 25 to 27 because everyone tries to saysomething already thinking that it will be subtracted by 1/3,2,3,none,18
+108,2,none,"I assume that most teams will choose low initial numbers, as they will be aiming to undercutthe other teams, being closer to the 2/3 target pointBy choosing 20, i think that it will be high to be above the initial low numbers, whilst not beingso astronomically high as to rule us out entirely.",2,2,none,20
+109,1,36-45,"I assume hat the average of all teams will be around 40, because most people tend to choosesmaller numbers(don't know why)So, I estimate that 23 is verly likely to be the closest to 2/3, but this is just a suugestion, ofcourse",1,1,36-45,23
+110,0,66-75,"I'm not entirely sure what sort of objective we are looking for, but as 66 is two thirds from 0 to100i suggest we choose this numberand again it's mere luck or probability which i'm not sure how to calculate.",0,1,none,66
+111,1,none,"its the highest number, and i would expect its the most common one to pick.",0,0,none,100
+112,1,46-55,"i just picked it because if about 50, the mid way point, is the average then 30 is about 2/3 ofthe average",1,1,46-55,30
+113,1,76-100,"Statistically, 50 would be the average and therefore two thirs of this would be roughly 33, how-ever i think, especially in the  rst round, people will be inlined to enter high numbers. So i thinkthat two thirs of the averageIf we both put in 100 and then estiamte somwehere near 60 i think we may have a better chance.Perhaps not as high as 60 but you get my reasoning.",1,1,46-55,55
+114,2,46-55,"If we put in 100, we'll know that the average is going to be slightly higher than what it would beotherwise (as the average would probably settle at around 50) { I think a few people will havethis idea (as there's a lot2/3rds of the average will be around 50, and the actual average being 60something.",1,2,none,50

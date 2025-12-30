@@ -1,0 +1,494 @@
+id,message,level,experiment,part,period,subject
+1_1_1_1,"As we already have red ball, it is more likely that our ourn is the red one. This is, because for a blue urn, the remaining two balls need to be both blue. While for a red one it is sufficient, that there is one red ball.",1,1,1,1,1
+1_1_2_2,Hiher Prob for red urn --> vote red Furthermore it worked until now for each round,1,1,2,2,1
+1_1_4_2,"We should not vote for blue, although we drew a blue ball. This is, because we only observe the right colour with 2/3 But we would determine the comittees decision, if we vote for blue. And in the blue urn, another team will vote blue.",2,1,4,2,1
+1_1_3_1,"We should vote for red, because it was more likely to draw a red ball out of a red urn. Furthermore, if we´d vote for blue, we´d determine the result, which we should´nt do, as we don´t have perfect information",2,1,3,1,1
+1_1_1_2,"The chance to draw a red ball is higher in a red urn, therefore we should vote for Red",1,1,1,2,1
+1_1_4_1,"Although we drew a blue ball, we should vote red, because we only have a 2/3 chance of having observed the right colour. This times the probability of a blue urn, if we observed right is 2/3*2/3= 4/9 which is less than a half, we cannot determine the commitees decision based on that. There will be another team voting blue given we are in the blue urn.",2,1,4,1,1
+1_1_2_1,"It is more likely to draw a red ball out of a red urn, therefore we should vote for RED Also if we vote for blue, we would determine the result, what we do not want",2,1,2,1,1
+1_10_3_2,just guessing,0,1,3,2,10
+1_10_1_1,did not exactly understand this experiment seems to be just depending on luck,0,1,1,1,10
+1_10_2_1,just luck dont know,0,1,2,1,10
+1_10_4_1,"I feel blue :,(",0,1,4,1,10
+1_10_1_2,maybe now the other way around dont know,0,1,1,2,10
+1_10_4_2,I feel red now :<,0,1,4,2,10
+1_10_3_1,dont know,0,1,3,1,10
+1_10_2_2,I feel red. Just a feeling,0,1,2,2,10
+1_11_2_1,Let's vote red. One person has blue and may pick blue. Red is safe. I like turtles,2,1,2,1,11
+1_11_4_2,red for turtles,0,1,4,2,11
+1_11_3_1,Let's go with red. As all teams should do at anytime. I like turtles,2,1,3,1,11
+1_11_3_2,pleeeassee pleeeasseee pick red.  we have to! Some guy just picked blue before and it was all bollocks. Also I like turtles,2,1,3,2,11
+1_11_1_1,I guess this is more about luck because there is no way to know it for sure. I would say blue just because of the higher probability. Also I like turtles Also it is likely that one other teram will pick blue and then it is that color anyways,1,1,1,1,11
+1_11_2_2,Same logic. I like turtles!,2,1,2,2,11
+1_11_4_1,red for turtles,0,1,4,1,11
+1_11_1_2,"i'd choose red because theres a higher chance. I tink at least one other team will vote for blue like all the time :D So if blue is correct, theres achance to get 200 anyway",2,1,1,2,11
+1_12_1_1,the probobility is higher that its a red urb,1,1,1,1,12
+1_12_1_2,It is just a guess,0,1,1,2,12
+1_12_2_2,it is more likely that it is a red urn,1,1,2,2,12
+1_2_4_1,Turtles like red.,0,1,4,1,2
+1_2_4_2,Even turtles choose red.,0,1,4,2,2
+1_2_1_1,2/3 chance of blue. GO blue!,1,1,1,1,2
+1_2_2_1,"we have a chance of 2/3 to be right, but if one vote blue, all is blue, that's why i vot red",2,1,2,1,2
+1_2_2_2,"Choosing blue isn't as helpful as choosing red, because: only one blue ball can overturn our whole decision but only a unanimous decision for red can help us the same way",2,1,2,2,2
+1_2_1_2,GO Blue again! 2/3 chance of blue urn,1,1,1,2,2
+1_3_1_1,I would choose red. Maybe there are 2 blue balls in the red urn and we have one of it and the other member votes blue.,2,1,1,1,3
+1_3_3_2,this time we could try a blue urn,0,1,3,2,3
+1_3_2_2,maybe this time it´s red :),0,1,2,2,3
+1_3_1_2,I would choose blue. Blue urn is more likely.,1,1,1,2,3
+1_3_4_1,"just because of the game system .. its luck, isnt it?",0,1,4,1,3
+1_3_2_1,Sinc the first part i´m not really sure about my decision,0,1,2,1,3
+1_3_4_2,just because of the game system,0,1,4,2,3
+1_4_3_2,"I would go with red If the color of the urn is blue, there is probably another team that took blue",2,1,3,2,4
+1_4_3_1,"I would still go with red. Although there is no way to know for sure, our chances are still higher if we take red Someone else may vote blue regardless.",2,1,3,1,4
+1_4_1_1,I think we have one of the 2 blue balls. But the urn is nevertheless red.,1,1,1,1,4
+1_4_4_1,"no clue, red is safe",0,1,4,1,4
+1_4_2_1,We only need one vote in the comitee in order for our whole vote to be blue. I would stick with red and if someone elese has blue they will most likely vote blue.,2,1,2,1,4
+1_4_1_2,There is no point for us to take blue I think the chances for us to get the right color are higher if we stick with red,2,1,1,2,4
+1_4_4_2,red is safe,0,1,4,2,4
+1_4_2_2,Same argument,2,1,2,2,4
+1_5_3_2,"red, because if any other is taking blue, it'll be blue",2,1,3,2,5
+1_5_3_1,"Once again I'd take red, because if any other is taking blue, it'll be blue anyways",2,1,3,1,5
+1_5_1_1,let's vote red. One person has blue and may pick blue. Red is safe.,2,1,1,1,5
+1_5_1_2,"At least on team may always vote blue, if two teams has blue even more likely. We will be safe if we vote red. Red is less likely to have an effect. our vote would not change anything in this case so we should stay with red",2,1,1,2,5
+1_5_4_1,"I'd take red, because it is more likely",1,1,4,1,5
+1_5_2_1,"I'd take red, because if any other is taking blue, it'll be blue anyways",2,1,2,1,5
+1_5_4_2,"I'd take blue, because it is more likely",1,1,4,2,5
+1_5_2_2,"I'd take red, because someone else can always pick blue as they draw blue for sure",2,1,2,2,5
+1_6_3_2,Chances are higher that we got a red ball out of a red urn (66%). Therefore I'd go for RED,1,1,3,2,6
+1_6_1_1,"well, chances that the urn is red and we get a red ball are 66%. chances to get a red ball out of a blue urn are only 33%. I'd say RED.",1,1,1,1,6
+1_6_1_2,Chances that we get a blue ball out of a blue urn are 66%. Chances for getting a blue ball out of a red urn are only 33%. I'd say BLUE. It is just more likely that the urn is blue. Last round this strategy went well!,1,1,1,2,6
+1_6_2_1,50 50 chance to get red at least 50 50 could also be 100 percent,0,1,2,1,6
+1_6_4_1,It is much more likely to get a red ball out of a red urn (66%). Therefore I'd definitely go for red.,1,1,4,1,6
+1_6_3_1,It is more likely that we got a blue ball out of a blue urn (66%). Chances that the urn was red and we got a blue ball are 33%. Therefore I'd say blue.,1,1,3,1,6
+1_6_4_2,We gotta pick red. Chances are higher that the urn is red and OMG I hope that crazy person who picked blue will NOT do so this time So please let's go for red. Chances are 66%.,1,1,4,2,6
+1_6_2_2,50 50 chance to get red at least 50 50 could also be 100 percent,0,1,2,2,6
+1_7_1_1,The probability of a blue urn is higher.,1,1,1,1,7
+1_7_1_2,Again higher proability of blue urn.,1,1,1,2,7
+1_7_4_2,same no clue,0,1,4,2,7
+1_7_4_1,did not understand,0,1,4,1,7
+1_7_3_1,"The probability for the red urn is higher (66,67 %).",1,1,3,1,7
+1_7_2_2,random guess,0,1,2,2,7
+1_7_2_1,too complicated best to play random,0,1,2,1,7
+1_8_1_1,"I suggest red because we don't hurt anyone with this decision If one of the others go for blue because they have a blue ball, the committee decision would be blue anyway",2,1,1,1,8
+1_8_1_2,"I suggest red because we don't hurt anyone with this decision If the others go for blue because they have a blue ball, the committee's decision will be blue regardless of our decision",2,1,1,2,8
+1_8_4_1,I suggest we go for red We don't hurt anyone with this decision,1,1,4,1,8
+1_8_3_1,"It is more likely than not that we have a correct ball Nevertheless, we could be the deciding vote for blue if the other two choose red",2,1,3,1,8
+1_8_3_2,I suggest we vote for red because we don't decide the committee with our votes in case someone else chooses blue,2,1,3,2,8
+1_8_2_1,I suggest we choose red because we don't hurt anyone with this decision,2,1,2,1,8
+1_8_2_2,"I suggest we choose red because that does not hurt anyone If the others (with blue balls) go for blue, the decision will be blue anyway",2,1,2,2,8
+1_8_4_2,"I believe we have the correct color There is no specific reason behind it If you think that the danger to decide the whole vote for blue is to high, I will go with red",1,1,4,2,8
+1_9_1_1,The probability of getting a red ball from a _red_ urn is 0.5 *two thirds. So it is just one third. red ball from blue urn - one sixth. that we got a correct ball - also two thirds.,1,1,1,1,9
+1_9_3_2,"probability of pecking a blue ball from a blue a urn is two times higher, that doing the same thing but with a red urn.",1,1,3,2,9
+1_9_1_2,pr(correct blue ball from a blue urn)= 0.5*0.66*0.66 pr(blue ball from red urn)= 0.5*0.33*0.33,1,1,1,2,9
+1_9_4_1,red is more probable and almost harmless for the outcome.,1,1,4,1,9
+1_9_3_1,probability of a red urn is two times higher.,1,1,3,1,9
+1_9_2_1,"There should be used basian probability formula for counting a correct probability, but i don#t remember it exactly. Just out of the common sense: a probability to get a right ball is two times higher.",1,1,2,1,9
+1_9_4_2,"once again, red is most probable and almost harmless for the final outcome.",1,1,4,2,9
+1_9_2_2,"If we think, that a correct ball is chosen, it makes sence to vote for a red urn. because of the higher probabilities.",1,1,2,2,9
+2_1_2_2,"Red ball, red urn ok",1,2,2,2,1
+2_1_3_2,chances are higher that it is red,1,2,3,2,1
+2_1_4_2,red my guess was ALWAYS correct,0,2,4,2,1
+2_1_2_1,blue ball so my guess is blue urn,1,2,2,1,1
+2_1_4_1,"my guess was never incorrect, so I will stick to red ball red urn",0,2,4,1,1
+2_10_4_1,the likelyhood is higher if everyone stays with his colour,1,2,4,1,10
+2_10_1_1,it´s more possible that the urn is blue too like our ball because there are two balls of the correct colour and only one of the other,1,2,1,1,10
+2_10_2_2,the likelyhood to win is higher if we vote our color,1,2,2,2,10
+2_10_2_1,the likelyhood to win is higher if we vote blue,1,2,2,1,10
+2_10_1_2,the likelyhood is bigger that the urn has the same colour like the ball,1,2,1,2,10
+2_10_4_2,likelyhood is higher if eyeryone stays with his colour,1,2,4,2,10
+2_11_3_1,"Even if we're observing the wrong color, it would still make sense to pick a color which has the highest chance. therefore I would pick red",1,2,3,1,11
+2_11_2_1,I guess red has a higher chance to be correct,1,2,2,1,11
+2_11_1_2,I would chose red,0,2,1,2,11
+2_11_3_2,I guess blue has a higher chance,1,2,3,2,11
+2_11_4_1,red has a higher chance,1,2,4,1,11
+2_11_2_2,At least that's my guess.,0,2,2,2,11
+2_12_4_1,pure randomness,0,2,4,1,12
+2_12_3_2,"two times the correct answer was red, now it should be blue maybe? but im not sure",0,2,3,2,12
+2_12_4_2,now it should be blue i think,0,2,4,2,12
+2_2_1_1,The probability of our urn being the coulour of the ball is 2/3 while the probability of the other colour is 1/3,1,2,1,1,2
+2_2_4_1,There's a higher probability of the whole urn being red. Also we just need one vote for blue in order to turn the complete urn blue. So I would stick with red.,2,2,4,1,2
+2_2_3_1,Higher probability.,1,2,3,1,2
+2_2_4_2,There's a higher probability of the whole urn being blue.,1,2,4,2,2
+2_2_2_1,Probability is higher.,1,2,2,1,2
+2_2_1_2,Probability that red is the right colour is higher.,1,2,1,2,2
+2_3_1_1,the chance that we recieve the wrong ball is smaller than the chance that we receive the correct ball However I think every team will think in the same way and there is no chance that the committe gets it right...,1,2,1,1,3
+2_3_4_1,Statistically the chance that we receive the correct ball is higher,1,2,4,1,3
+2_3_3_1,Statistically there is a higher chance that we receive the correct color,1,2,3,1,3
+2_3_2_1,The chance that we observe one of the 4 correct balls is higher,1,2,2,1,3
+2_3_2_2,Staistically there is a higher chance that we see the correct ball,1,2,2,2,3
+2_3_3_2,The chance that we see the correct color is higher...,1,2,3,2,3
+2_3_4_2,the chance that we receive the correct color is higher,1,2,4,2,3
+2_3_1_2,Hm... the chance of it being the correct color is higher than it being the wrong one,1,2,1,2,3
+2_4_4_2,Bigger likelyhood of observing right color and bigger likelyhood of ball having same color as urn,1,2,4,2,4
+2_4_3_1,"more likely that we are a team observing the right urn, and bigger chance of same colored ball being drawn from urn",1,2,3,1,4
+2_4_4_1,Bigger likelyhood that we observe the right color and bigger likelyhood of ball having same color as the urn,1,2,4,1,4
+2_4_3_2,same likelyhoods as in first round,1,2,3,2,4
+2_4_1_1,Blue colored urn is more likely right now because it is more likely for a blue ball to be drawn from the blue urn,1,2,1,1,4
+2_4_2_1,it is more likely that we are a team oberserving a right urn and then it is more likely for the balls colored like the urn to be drawn,1,2,2,1,4
+2_4_1_2,It is a red urn just because… I think it is we are the team observing the wrong urn because the other two were right when voting for red,0,2,1,2,4
+2_6_1_1,No clue so far. Ask me again next time.,0,2,1,1,6
+2_6_2_1,more likely 4:2,1,2,2,1,6
+2_6_3_1,more likely: 66%,1,2,3,1,6
+2_7_1_1,"red blue 50 50, I go blue",0,2,1,1,7
+2_7_3_2,Red?,0,2,3,2,7
+2_7_4_1,Chances for blue are higher I guess,1,2,4,1,7
+2_7_4_2,higher chances for blue,1,2,4,2,7
+2_7_2_1,I don't have a clue. Sorry,0,2,2,1,7
+2_7_1_2,red blue 50 50 my gues is blue,0,2,1,2,7
+2_7_2_2,I think it's time that red has to be correct for the first time :D,0,2,2,2,7
+2_7_3_1,Maybe blue. I don't know. It's all about luck,0,2,3,1,7
+2_8_1_2,possibilty for red ones is higher than for blue ones,1,2,1,2,8
+2_8_3_2,assumiing again that is more possible that we have picked the right color,1,2,3,2,8
+2_8_3_1,assuming that we have picked the right one,1,2,3,1,8
+2_8_2_2,"don’t know what to pick, maybe blue again?",0,2,2,2,8
+2_8_1_1,trying to stay with our color,1,2,1,1,8
+2_8_2_1,it is more likely as there are two blue balls and one red ball in the urn,1,2,2,1,8
+2_9_1_2,"If other teams picked a blue ball, they will vote for it. But if the urne is red, we can only win, if we chose red",2,2,1,2,9
+2_9_4_2,"If red is right, we have to vote for it in order to win. If blue is right, at least one of the teams will for it, so we win as well vote*",2,2,4,2,9
+2_9_1_1,"Lets vote for red, because if other teams picked a blue ball, they will vote for blue and blue will be chosen as right decision anyway. But in case, the right color of the urn is red, then the only way to pick it up is to vote for red",2,2,1,1,9
+2_9_3_2,"If the right color is red, we have to vote for it to pick it up. If it is blue, then the second team will vote for it",2,2,3,2,9
+2_9_2_1,"Lets pick up the red urne to make sure it will be chosen if it is the right one. If not, at least one of the 4 teams will vote for blue",2,2,2,1,9
+3_1_1_1,"Even if we have a blue urne the possibility of another team voting for blue is high, so blue is more likely to be picked. If we do have a red urne however and are the only team that had the blue ball, we'll mess up our chances to earn more simply by voting for blue. Please vote red.",2,3,1,1,1
+3_1_3_1,"Red is just as likely as blue By voting blue we could risk the situation of hyving a red urne and two votes pro red - and ours blue So that we'd be stuck with blue If this is blue, chances are, the other team observing blue will vote blue So, strategically speaking, voting red here is the smarter decision",2,3,3,1,1
+3_1_2_1,"Making a decision for blue is way riskier than choosing red because of how the votes are counted If it really is blue, three other teams will have a blue ball and the chance that one of those teams votes blue is really high - blue would be chosen as our commitees pick If it is red however, us voting blue would make our commitees vote blue and therefore wrong",2,3,2,1,1
+3_1_4_1,Higher chance to have the red urn. However I think every team will think in the same way and there is no chance that the committe gets it right... Red is less risky.,2,3,4,1,1
+3_1_4_2,"Red needs to voted by all If we witness a red ball, we should definitely vote red, as well It is safer to vote red and better for the other teams.",2,3,4,2,1
+3_1_2_2,Picking red when picking a red ball is the only logical thing to do Because voting blue will automatically turn the commitees choice to blue Red is safe to vote for the commite. Someone may vote blue.,2,3,2,2,1
+3_1_1_2,"Blue is \qdominant\q - if only one team chooses blue, it will make our commitees decision blue So choosing red when you see a red ball is the only logic consequence Choosing blue whilst seeing a red ball is simply a stupid strategy",2,3,1,2,1
+3_1_3_2,"Because of the voting rules, red is much more unlikely to be made the choice but just as likely as blue to be picked Voting blue while picking a red ball makes no sense",2,3,3,2,1
+3_10_3_1,without replacement has nothing changed with the fact that if you see red you should vote for red,1,3,3,1,10
+3_10_4_2,only rational decision is to go with red,1,3,4,2,10
+3_10_4_1,higher chances with red,1,3,4,1,10
+3_10_2_2,Red will give us the highest chance to win. Dont get influenced by part 1 the round,1,3,2,2,10
+3_10_2_1,"Based on our information, there is a higher chance that it is a red urne. Red is the only rational decision that gives us the highest chance",1,3,2,1,10
+3_10_1_2,again based on our information there is a higher chance that it is a red urn,1,3,1,2,10
+3_10_3_2,There is a higher chance with blue! Don't get influenced by the first part of Round III.,1,3,3,2,10
+3_10_1_1,there is a 66% chance that it is a red urn,1,3,1,1,10
+3_11_2_2,The chance for a blue unre are 4/6 or 2/3. We should take blue,1,3,2,2,11
+3_11_2_1,The chance to get a red urne is 4/6 or 2/3. We should vote for red.,1,3,2,1,11
+3_11_3_2,Blue has a higher chance.,1,3,3,2,11
+3_11_4_2,who the heck voted for blue the last round.... Red is the only logical decision here too!,1,3,4,2,11
+3_11_4_1,"The chance for a red urne is higher. It isn't logical to base our decision on the choices of the other groups. Therefore, red.",1,3,4,1,11
+3_11_3_1,"Still, the chance is higher to get a red urne.",1,3,3,1,11
+3_11_1_1,"The chance in a blue in is higher to get a blue ball. Therefore, I would suggest to vote for the blue urn.",1,3,1,1,11
+3_11_1_2,"The chance of a red urne are 2/3. As we want to maximize our chance, we should vote for red.",1,3,1,2,11
+3_12_4_1,If we choose blue it is less risky,1,3,4,1,12
+3_12_3_2,"1/3 of all tems is observing wrong color, so lets stick with our ball color.",1,3,3,2,12
+3_12_1_2,2 out of 3 possibility that it is red,1,3,1,2,12
+3_3_1_2,"Again the chance of picking a red ball in a red urn is 2 to 3. Therefore, the urn is red.",1,3,1,2,3
+3_3_2_2,"Red has  2/3 chance. That is why I say that the urn's color is red, too.",1,3,2,2,3
+3_3_1_1,It is blue because we have a 2/3 chance of picking the right color. So I reason that the urn is blue.,1,3,1,1,3
+3_3_3_1,Blue has a 2/3 chance.,1,3,3,1,3
+3_3_4_2,Red still has a higher chance of winning. So I suggest the urn is red.,1,3,4,2,3
+3_4_2_2,Blue has a 2/3 chance,1,3,2,2,4
+3_4_4_2,"If 6 balls are drawn (1 for each team), it is likely, that one or more teams get a blue ball although the urn color is red (so that blue is less likely). As unanimity is required to decide for red, I would vote for red because in case most teams get a blue ball, one team will probably vote for blue, so that the decision is blue.",2,3,4,2,4
+3_4_2_1,Blue has a 2/3 chance.,1,3,2,1,4
+3_4_1_1,I think blue has a 2/3 chance,1,3,1,1,4
+3_4_1_2,Red has a 2/3 chance.,1,3,1,2,4
+3_5_2_1,"We have blue, more likely to get the bleu urn. Let's vote blue!",1,3,2,1,5
+3_7_2_1,Take red. Higher chance.,1,3,2,1,7
+3_7_2_2,Red. The chance of oberserving the correct colour is bettet,1,3,2,2,7
+3_8_2_2,it is more likely to draw a red ball from the red urn. So the decision is red.,1,3,2,2,8
+3_8_1_1,"In the red urn there are 2 red balls and 1 blue ball whereas in the blue urn there are 2 blue balls and 1 red ball. Thus, it seems more likely that it is a red urn.",1,3,1,1,8
+3_8_3_2,"We should vote for red because for this colour unanimity is required. If the urn colour is red, 2 teams got a red ball and 1 team a blue ball. However, all 3 must decide for red to go trough. If the urn colour is blue, we are the only team with a red ball so that we can assume that at least one of the two teams with blue balls votes for blue. As for blue no  unanimity is requried,  the blue vote will go through.",2,3,3,2,8
+3_8_4_2,"We should vote for red as for this colour unanimity is required. If the urn colour is red, 4 teams will receive a red ball and 2 teams a blue ball. All teams must vote red to go thorugh. However, if the urn colour is blue, 4 teams got a blue ball and two teams got a red ball. However, one blue vote is enough for the decision to go through.",2,3,4,2,8
+3_8_1_2,"Even if we're observing the wrong color, it doesn't matter, because there's a chance of 2/3 that the other teams are observing the right one and will chose the right one",2,3,1,2,8
+3_8_2_1,It is more likely to draw a blue ball from the blue urn. So the decision is blue.,1,3,2,1,8
+3_8_4_1,"We should vote for red because for this colour unanimity is required. If the colour of the urn is red, 4 teams got a red ball and 2 teams got a blue ball. For the decision to go through all teams must vote for red. If the colour of the urn is blue, 4 teams got a blue ball and 2 teams got a red ball. For blue to go through it is enough that one teams votes for blue. As 4 teams got a blue ball in this case it is very likely that at least one of them votes for blue and thus decides the vote",2,3,4,1,8
+3_8_3_1,"We should vote for red because for this color unanimity is required. if the urn is red, the other teams both got a red ball and we got the blue ball, so that we need to vote for red If the color of the urn is blue, we and another team got a blue ball and one team got a red ball. As for blue no unanimity is required, we can expect the other blue ball team to choose blue, so that the overall decision will be blue.",2,3,3,1,8
+3_9_4_2,we need to stick with red no matter what actual color is. its only logical to choose red based on the voting rule,2,3,4,2,9
+3_9_4_1,we should stick with red no matter what color actually is right. if its blue at lease one other team will pick blue and we all win,2,3,4,1,9
+3_9_1_1,"there is a 2/3 chance that red ball is the correct one. if its actuall red, one other team should receive the red as well and they probably will choose red. even if its blue, i guess the team receive blue will choose blue and the final vote will be blue",2,3,1,1,9
+3_9_3_1,"only by choosing red we all have a bigger chance to win. if the result is blue, at least one team might choose blue and we will win. but if it turned out to be red, we just have to hope that the one team who got the blue ball stick with choosing red. no matter what color we get, we all should choose red. its the only logical choice to make",2,3,3,1,9
+3_9_3_2,"we should choose red no matter what color we got. its the only logical choice to make because if the result is red, we are the onlv team who got the wrong color and our decision is critical. if its blue, one other team should also got blue color and might stick with blue if they dont think in our way, and we will still win. stick with red have a bigger chance to win either way",2,3,3,2,9
+3_9_1_2,"we should choose red. because if its actually red, the other 2 team will choose red and we all win. if its actually blue, the other team who got blue ball will probably choose blue. and based on the rule the final vote will be blue. we win again",2,3,1,2,9
+3_9_2_2,"lets vote for red. if its blue, at least one other team will pick blue and we will win. if its red, we just have to pray that other teams all pick red...",2,3,2,2,9
+3_9_2_1,"based on the rule we better pick red because if its actually red, we have a bigger chance win. even if its blue, 3 other teams who got blue balls might choose blue, and we just need one team to vote for blue to win.",2,3,2,1,9
+4_1_1_1,"I guess the blue urn makes more sense, as there are twice as many blue balls in it than in the red urn.",1,4,1,1,1
+4_1_2_2,Double chance to get a red ball if we choose the red urn,1,4,2,2,1
+4_1_1_2,"We have a red ball. So it would be reasonable to choose the red urn. However, the chance that all five groups chose red is pretty low, so I'm not sure",1,4,1,2,1
+4_1_3_1,chances to get red are higher,1,4,3,1,1
+4_1_2_1,Double chance to get a blue ball if we choose the blue urn,1,4,2,1,1
+4_10_3_2,please lets pick red !!!! cause if its blue to other teams will pick blue,2,4,3,2,10
+4_10_1_1,our probability to have a blue urn is 66% so I would go for blue ....,1,4,1,1,10
+4_10_3_1,got the red ball therefore I would pick red cause if anyone picks blue it will be blue,2,4,3,1,10
+4_11_1_1,Let's try red although it's very likely that someone chooses blue.,2,4,1,1,11
+4_11_3_1,I'd say \qalways choose red\q but maybe we should choose blue since everbody thinks \qalways choose red\q and it's 2/3 that we win.,3,4,3,1,11
+4_11_2_1,Always red is the way to go.,0,4,2,1,11
+4_11_2_2,Always red.,0,4,2,2,11
+4_11_4_2,red for sure. It's likely one of the others get blue then they vote blue anyway,2,4,4,2,11
+4_11_3_2,Seems like we should choose blue since it's 2/3.,1,4,3,2,11
+4_11_4_1,In this case I'd choose red. It's very likely that at least some of the other three teams choose blue so we should keep the chance to win if it's red.,2,4,4,1,11
+4_12_2_2,Lets see...,0,4,2,2,12
+4_12_3_1,higher probability of blue,1,4,3,1,12
+4_12_1_1,Our team has a blue ball :D So when we have at least two blue balls the other picks blue ball so we double our chance with the red ball;),2,4,1,1,12
+4_12_3_2,higher probability of red this time,1,4,3,2,12
+4_12_2_1,Good luck :D Red ;),0,4,2,1,12
+4_12_1_2,Same argument but now we have double chance with the red ball ;),2,4,1,2,12
+4_12_4_1,Lets stick to the 2 out of 3 chance that it is really red,1,4,4,1,12
+4_2_4_2,we should pick red ( the oposite) to reach a consensus becaus eeveryone will think his decision is right,2,4,4,2,2
+4_2_2_2,double chance for red but it is really difficult to earn the 2 euros... but we should pick red,1,4,2,2,2
+4_2_1_2,We should choose red because the possibilty to observe the right ball is 2/3. Nevertheless we should reach a consensus with the other member to gain 2 euros,1,4,1,2,2
+4_2_4_1,we should choose the opposite to get the chnace to reach a consensus and gain 2 euros everyone will think his chose is right so we should pick red,2,4,4,1,2
+4_2_2_1,the possibility is 2/3 so we should pick red.,1,4,2,1,2
+4_2_3_1,I think we should choose the opposite to reach a consensus. 1/3 chance that our ball is the wong observation so lets pick blue,0,4,3,1,2
+4_2_1_1,We picked a blue ball. As the possibility to observe the right color is 2/3 we should choose the color which was observed the most.,1,4,1,1,2
+4_2_3_2,we should choose the opposite to reach a consensus and to have the chance to gain 2 euros,0,4,3,2,2
+4_3_1_2,red maybe?,0,4,1,2,3
+4_3_2_2,absolutly red this time I can feel it,0,4,2,2,3
+4_3_2_1,I feel blue,0,4,2,1,3
+4_3_1_1,blue?,0,4,1,1,3
+4_4_2_2,"I would choose red, because if it really is red and every other team picks red we would be the ones to ruin it if it really is red, and if it really is blue there is a big chance that one of the other three teams that picked a blue ball will actually say blue",2,4,2,2,4
+4_4_2_1,"I think it is obvious to choose red, because if the true color is blue, I m sure one of the teams will choose blue.",2,4,2,1,4
+4_4_3_1,"I would choose red, because there is a huge possibility that it really is red and if we choose blue it won't matter what the other teams decide",2,4,3,1,4
+4_4_1_1,"I think the obvious choice here is red, if the color of the urn is blue, probably someone in the other team will get blue and choose it and we will still have the correct answer",2,4,1,1,4
+4_4_1_2,I think this is an obvious choice. Same argument as before.,2,4,1,2,4
+4_5_2_1,the probability is 2/3 so it would make more sense to say red.. and this worked the last round for me,1,4,2,1,5
+4_5_3_2,it's more probably that it's red,1,4,3,2,5
+4_5_4_1,the probability is 2/3 so i would guess blue,1,4,4,1,5
+4_5_1_1,most probably blue,1,4,1,1,5
+4_5_1_2,because the probability is 2/3 it's more probable to be blue,1,4,1,2,5
+4_5_2_2,the probability is 2/3 so choosing red would make sense,1,4,2,2,5
+4_6_1_1,"Blue because probably our urn is blue, even though this would ruin the vote if the urn is red",1,4,1,1,6
+4_6_3_2,"every ball has to be picked. If its a red urn, we can win, if its a blue urn, lets hope for the others to vote blue",2,4,3,2,6
+4_6_4_2,"The probability for the blue urn is higher (66,67 %).",1,4,4,2,6
+4_6_1_2,"Definitely red! if we got the wrong ball and the others choose blue, than we will still win.",2,4,1,2,6
+4_6_3_1,"red, because even if its a blue urn someone has to pick the red ball.. what if its us?",2,4,3,1,6
+4_6_2_2,"Same logic --> if red, we are right, if blue, we can still win",2,4,2,2,6
+4_6_2_1,"Definitely red, if the majority of others pick a blue ball there will be at least one group that chooses blue  --> if red urn, we are right, if blue urn, we can still win",2,4,2,1,6
+4_7_3_1,twice more likely to win with our ball color,1,4,3,1,7
+4_7_4_1,maybe we always vote red to be safe. others can always vote blue.,2,4,4,1,7
+4_7_4_2,"if you see red, say red. if you see blue think about to lie",2,4,4,2,7
+4_7_3_2,voting our ball color is the best move to get the 2/3 chance to win,1,4,3,2,7
+4_8_2_2,If its a red urn only one or two others will have blue aswell. So the probability is high that nobody does a wrong choice. if it s blue four others will have blue aswell and i do not believe that everybody has thoughts about how to prevent this. so lets vote red. if blue people will see,2,4,2,2,8
+4_8_2_1,"So I see a high probability, that by 6 choices at least one or maybe two teams will have the wrong colour. Maybe its us. In what I do not believe is that all gonna have a thought about how to prevent this. Therefore I d choose red, no matter what. If there are 1 or 2 more who have blue balls its about them. If there are 3 or 4 more with blue its prabably a blue urn and not everyone will take red. So red!",2,4,2,1,8
+4_8_1_2,Definetly let vote red! If its not a red urn it s enough to have one other vote of an other team. So that we all have red is not that ...,2,4,1,2,8
+4_9_1_1,more likely to be blue,1,4,1,1,9
+4_9_3_1,always opposite of what was picked,0,4,3,1,9
+5_10_2_2,"Although the likely hood is less, there is still a chance the urn is blue",1,5,2,2,10
+5_10_3_2,it actuallzy makes no difference so lets just go with red for lulz,0,5,3,2,10
+5_10_2_1,the likely hood of the urn being red is 2/3,1,5,2,1,10
+5_10_3_1,lets just choose red for the lolz,0,5,3,1,10
+5_10_4_2,lol,0,5,4,2,10
+5_11_4_1,"in general there 50:50 percent that the ball is trully red or blue. At least Two teams alwayes receives blue balls, and only one vote for a blue ball is enough. I suggest to vote for red",2,5,4,1,11
+5_11_1_1,"We received a red ball, so it´s twice more likely that the urn is red than it is blue. We are interested in the correct guess to earn more money)",1,5,1,1,11
+5_13_2_1,higher chance,1,5,2,1,13
+5_13_1_2,it is more likely that we are in blue,1,5,1,2,13
+5_13_4_1,"I suggest we vote red. There is a 50/50 chance that the urn is red, but we don't lose anything by choosing red. If the urn is red, and all other teams choose red, we win… if even one person chooses blue - the committee's decision is blue, so our decision won't make a difference.",2,5,4,1,13
+5_13_4_2,"we have a blue ball, but even if the urn is blue, the committee doesen't loose anything from our decision to vote red as I wrote before.",2,5,4,2,13
+5_13_2_2,"i'd choose blue because theres a higher chance. I tink at least one other team will vote for blue like all the time :D So if blue is correct, theres achance to get 200 anyway",1,5,2,2,13
+5_13_3_1,"i think the  other teams will pick the blue urn because threres a higher chance , thats why I'd choose red",2,5,3,1,13
+5_13_1_1,"there are two times more red balls, higher chance that this is the right urn",1,5,1,1,13
+5_14_4_2,"Red is the dominant strategy once again. If the solution really is blue, at least one of the other (six!) teams will choose blue and that is already sufficient as the comitee´s decision (see rules) If the urn really is blue, 4 teams have received a blue signal and at least one of those teams won´t know that red is the dominant strategy",2,5,4,2,14
+5_14_4_1,"Red is the dominant strategy once again. If the solution really is blue, at least one of the other six(!) teams will choose blue and that is already sufficient as the comitee´s decision (see rules) Copy this explanitaion for the next round to your next partner",2,5,4,1,14
+5_14_1_1,Singnal is more likly red,1,5,1,1,14
+5_15_4_2,"i think we sould take red, because if one of the other teams take blue our desicion is not relevant",2,5,4,2,15
+5_15_4_1,"i think we should take red, because our chance is 2/3 that it is right",1,5,4,1,15
+5_15_2_2,"2/3 change to be blue, i think we should take blue",1,5,2,2,15
+5_15_3_2,"i think we take red because if the ball was in a red urn, the chance was 2/3 to take it",1,5,3,2,15
+5_15_1_1,"i'm not sure... if we take red and one of the others not, blue is taken, so i think we should take red. If one of the others is sure and take blue, it will be blue fianlly finally",2,5,1,1,15
+5_15_3_1,"Let's take the opposite colour of our ball, because if the urn is red, there is still one red ball and one blue ball in it and our chance is 50:50 if the urn is blue there is no red ball in it now and blue is 1005 right",1,5,3,1,15
+5_15_1_2,"i'm not sure... i guess it's red, because if the urn is red, it's more likely that the ball is red...",1,5,1,2,15
+5_15_2_1,"i'm not sure. But 4 balls have the same colour, so if blue is one of the 4 balls, i think we should take blue",1,5,2,1,15
+5_17_4_1,"we don't know the drawing order so we could be first,  last or somwhere in between so i'd say just stick with the color we are given",1,5,4,1,17
+5_17_1_1,chances are it's a red urn not much more we can do about it,1,5,1,1,17
+5_17_4_2,somebody will pick blue anyways so i suggest just stick with red if it's a red urn and nobody picked blue we win and if it's a blue urn somebody will probably have picked blue already,2,5,4,2,17
+5_17_3_1,i don't think that anything changed significantly regarding our odds to be right here bc we don't know when drawing we had in the order so i'd say just stick with the given color,1,5,3,1,17
+5_17_1_2,gotta stick with the odds and the odds are telling us that it's a blue urn,1,5,1,2,17
+5_18_3_1,I would choose red. Maybe there are 2 blue balls in the red urn and we have one of it. If so other team may vote blue. No need to vote blue.,2,5,3,1,18
+5_18_2_2,blue is more likely because of the game system ...,1,5,2,2,18
+5_18_3_2,I would choose red. The others have blue and pick blue.,2,5,3,2,18
+5_18_1_2,"We got a blue ball, so in a blue urn there will be two times more blue balls",1,5,1,2,18
+5_18_2_1,red ball -> red urn,1,5,2,1,18
+5_19_3_1,blue is 2/3 chance,1,5,3,1,19
+5_19_3_2,I have no luck,0,5,3,2,19
+5_19_2_2,stick with the blue one?,1,5,2,2,19
+5_19_1_1,higher odds of red,1,5,1,1,19
+5_19_1_2,higher odds of red,1,5,1,2,19
+5_19_2_1,best option should be stick with red,1,5,2,1,19
+5_2_1_1,The only rational thing we can do is to choose the color which our ball has. Then we have the highest probability to win.,1,5,1,1,2
+5_2_4_1,Same thing as before. If we choose the opposite color we can be 100% sure to win because of the non replacement of the balls.,2,5,4,1,2
+5_2_2_2,Always choose the opposite color! If the urn is blue 4 teams will see a blue ball and 2 teams will see a red one. If every team chooses the opposite color then blue will be the committees guess,2,5,2,2,2
+5_2_4_2,"I am tired of explaining it, but please choose the opposite color. If every team does that we will win 100%.",2,5,4,2,2
+5_2_1_2,This experiment is just fucked up. There is actually no rational strategy.,0,5,1,2,2
+5_2_3_1,"Always the opposite color! In case we have a red urn 2 teams will see a red ball and one team will see a blue one. If every team chooses the opposite color, we will have two votes for blue and one for red . Ergo we can be sure to win!",0,5,3,1,2
+5_2_3_2,"Choose red. By choosing the opposite color we can be sure to win. urn is red -> 2 teams will se red, one team blue -> everyone chooses the opposite and red will be the guess",0,5,3,2,2
+5_20_3_1,red is more likely and no risk,1,5,3,1,20
+5_21_4_1,Maybe we are one of the 4 groups observing the correct colour.,1,5,4,1,21
+5_21_1_2,"We have blue, but i think we should vote red. Maybe the others, if they have blue will decide blue and if not, it will be red ;)",2,5,1,2,21
+5_21_4_2,More likely to have red. Let´s hope we´re lucky.,1,5,4,2,21
+5_21_3_2,"I think we got the wrong colour. So let´s try red.. if there is an other team with blue, maybe they will vote blue and it will be blue.",2,5,3,2,21
+5_21_3_1,Let´s try red :) the other may have blue and then vote blue and it will be blue anyway,2,5,3,1,21
+5_21_2_2,same as before by red :D,0,5,2,2,21
+5_21_2_1,things got complicated :( .. I go with my gut feelin and vote blue. Just a feeling,0,5,2,1,21
+5_22_4_1,No idea. Convince me please Red?,0,5,4,1,22
+5_22_2_2,Red is my lucky colour :-) I'm in for red!,0,5,2,2,22
+5_22_3_1,"So far, I've not read a message here from my team partner...People in this Messenger are as active as in ICQ Red, because someone will take blue so I'm indifferent",2,5,3,1,22
+5_22_1_2,"Red, because why not and someone is going to vote for blue anyway Odds for red are higher though, so let's play safe",2,5,1,2,22
+5_22_3_2,"So one red ball is gone, right? That makes the odds for blue higher, isn't it? I'm taking blue unless you take red",1,5,3,2,22
+5_22_2_1,blue will bring us luck and fortune,0,5,2,1,22
+5_22_4_2,Here is my lucky guess we should vote for RED...,0,5,4,2,22
+5_23_3_1,There are 2 possibilities: 1) We have the only blue ball a) we choose blue --> committee chooses blue --> wrong b) we choose red -- committee chooses red --> right 2) we are one of two teams that has blue a) we choose blue --> c blue --> right b) we choose red --> other team might --> don't know so we should choose red,2,5,3,1,23
+5_23_3_2,"Red is the dominant strategy! We won with red last round, even though our ball was blue.",2,5,3,2,23
+5_23_1_2,67% chance of being right,1,5,1,2,23
+5_23_4_2,higher odds,1,5,4,2,23
+5_23_1_1,"if we select the color we picked, we have a 67% chance of being right. That's why I would pick blue.",1,5,1,1,23
+5_23_4_1,gotta trust the odds,1,5,4,1,23
+5_24_2_2,I think we should go with red again.. Its sort of of a higher chance to win if everyone picks red,2,5,2,2,24
+5_24_3_2,Again I think we should go with red.,2,5,3,2,24
+5_24_4_2,Should we go with read again? Worked out very well last round.. :D sort of,0,5,4,2,24
+5_24_3_1,I think we should stick to read. The chances that everyone picks the red ball are really small so we are save with read I hope,2,5,3,1,24
+5_24_1_2,"Let's choose red. If the urn is blue, it's very likely that someone of the other teams with blue balls will choose blue. But if it's red, we have still the chance to win.",2,5,1,2,24
+5_24_2_1,"I think we should go with the red one, because of the 'unanimity voting rule'.. Hope its the right idea :)",2,5,2,1,24
+5_24_4_1,"To be honest, I have no idea anymore. I even have no idea if  I understood the instructions because my last teampartner said, I was wrong.. but I was absolutely shure (after teh first part) that I was right so, yeah. I go with whatever is your suggestion",0,5,4,1,24
+5_4_4_1,on should always vote red as someone may always vote blue,2,5,4,1,4
+5_4_2_2,I believe it does not really matter what u pick. We will be correct as a committee in about 50% of all cases,0,5,2,2,4
+5_4_1_2,It makes sense to always vote for blue. The chance of all 3 groups having the ball of the same color as the urn it was drawn from are below 30 percent. The voting mechanism makes red as an answer way more likely than it should be.,1,5,1,2,4
+5_4_1_1,Our best choice is to pick red. We observed a red bal being drawn. Nonetheless even if its a blue urn that happens in 1/3 of all draws. The probability that all three groups observe a ball being drawn that has the same color as the urn its drawn from is just below 30 percent.,1,5,1,1,4
+5_4_3_1,50% of the cases we will be correct. Doesn't matter what you pick.,0,5,3,1,4
+5_4_4_2,Decision making should be the same as in the previous round. The consenus seems to have been to always pick red.,2,5,4,2,4
+5_4_2_1,I do not think it matters what you pick,0,5,2,1,4
+5_5_2_1,2/3 chance to be right,1,5,2,1,5
+5_5_4_1,"it's without replacement, so its ok to say blue",1,5,4,1,5
+5_5_2_2,2/3 chanece to be right,1,5,2,2,5
+5_5_1_2,"I'd say we take red If we take blue, and the other teams take red, which then turns out as the right color, we lose",2,5,1,2,5
+5_5_3_1,because there is a 2/3 chance to be right and no risc because its red,1,5,3,1,5
+5_6_3_1,no matter what we choose theres equal chances of the color we pick being either right or wrong so im going for red,0,5,3,1,6
+5_6_2_1,if the urn is blue that means there are 4 blue balls in there and therefore more chances of picking a blue ball,1,5,2,1,6
+5_6_4_1,"the prbability of picking a red ball from a red urn is higher than the probabilityy of picking one from a blue urn, therefore im going for red",1,5,4,1,6
+5_6_2_2,"The chances of picking a red ball from a red urn are higher, plus probably someone is gonna pick blue anyways so lets place safe and pick red",1,5,2,2,6
+5_6_1_1,"Maybe it is better to give the consensus-thing a chance, rather thank just picking blue",2,5,1,1,6
+5_7_4_1,"fuck it, pick whatever you like ;) although I think, blue is the best choice because we picked blue but maybe, i'm not getting it",1,5,4,1,7
+5_7_4_2,wtf,0,5,4,2,7
+5_7_2_2,The chance for a blue urn are bigger as we picked a blue ball,1,5,2,2,7
+5_7_3_2,red is more likely because of the game system and we picked red,1,5,3,2,7
+5_7_1_2,Red is the best possible choice,1,5,1,2,7
+5_7_1_1,Red is the best possible choice,1,5,1,1,7
+5_8_2_2,unicorns are real,0,5,2,2,8
+5_8_4_1,"little johnny, can you tell me the name of 3 great kings who have brought happines into people lives drinKing, smoKIng, fucKing",0,5,4,1,8
+5_8_4_2,i am feeling it,0,5,4,2,8
+5_8_1_2,same logic pick the color,1,5,1,2,8
+5_8_3_2,last time you were wrong. i dont believe you anymore,0,5,3,2,8
+5_8_2_1,just saw a red unicorn,0,5,2,1,8
+5_8_1_1,first one is red. so the chances is 66/33,1,5,1,1,8
+5_9_3_1,i would vote for red bc if we chose blue the commitees decision wold be determined by our vote,2,5,3,1,9
+5_9_1_2,let s now pick the shown colour bc the others now will probably enter their opposite colour and be scared to vote blue when the ball is red,3,5,1,2,9
+5_9_4_2,"i would pick red but if your suggestion is blue, ill go with blue too. if yours is red, we take red",0,5,4,2,9
+5_9_4_1,"blue urn is more likely, but I can pick red if you think it is red.",1,5,4,1,9
+6_1_1_1,blue because why not i have no idea i think blue being the color of the urn is more likely,1,6,1,1,1
+6_1_2_1,if it was taken from the urn it is more likely that it has the same color as the urn because there are more balls in that color so im going with blue,1,6,2,1,1
+6_10_1_2,If we have the red ball weh should vote for red as the probability is higher that the urn is red and we don't know the colours of the other teams.,1,6,1,2,10
+6_10_4_1,We will not lose anything by voting for red as the blue teams may decide to vote for blue and our vote would not change anything in this case so we should stay with red,2,6,4,1,10
+6_10_3_2,We have a 2/3 chance of seing the right colour and if only one team votes for blue the committee's vote is blue so I would reccommend to stay at blue as the other team getting blue may decide to change its opinion and vote red when they have blue,3,6,3,2,10
+6_10_3_1,The probability that the urn is red is 2/3 we will not lose anything with voting for red If just one team votes for blue the decision is blue so we would not change the decision by voting for red,2,6,3,1,10
+6_10_2_1,"As we can assume, that some of the members getting the blue ball will vote for blue we should stay at red",2,6,2,1,10
+6_10_1_1,The probability that we have the blue urn is higher right?,1,6,1,1,10
+6_10_2_2,I think we should stay at blue because the probability of the urn to be blue is 50/50 so the others may decide to take red as they assume that one team will choose blue but if every team thinks in this way we would lose,3,6,2,2,10
+6_11_1_2,"We need to chose Red. If we are the only ones who picked blue, then the urn is red and we guess correct If the urn is blue, then the other guys (hopefully not following this logic), will pick blue so there will be at least one blue vote and we win as well If the others guys (also blue) think the same way then we lose But this is too many ifs :)",2,6,1,2,11
+6_11_3_2,More likely to be red,1,6,3,2,11
+6_11_2_1,Pure randomness now :) I just pick red you can pick blue,0,6,2,1,11
+6_12_1_2,"The blue on would be the dominant decision, if ours is the only one. So I would rather pick red.",2,6,1,2,12
+6_13_4_1,randomly choosen,0,6,4,1,13
+6_13_3_2,Let's try red. I think we need to match in this experiment,0,6,3,2,13
+6_13_3_1,ok - i will choose the color that you choose before!!! :-),0,6,3,1,13
+6_13_2_2,"Ok, i dont think that it is \qblue-blue-red-red\q so lets vote for blue. \qblue-blue-red-blue\q :'D dont know why...",0,6,2,2,13
+6_13_1_2,Red is safe. One else will always blue,2,6,1,2,13
+6_14_2_2,"Again, we have a red ball, let's vote blue for the same reason.",1,6,2,2,14
+6_14_1_1,Risky to vote blue but others may not vote blue even when draw blue. I say we vote blue.,3,6,1,1,14
+6_14_2_1,"I suggest we vote red. There is a higher chance that the urn is red. if even one person chooses blue - the committee's decision is blue, so our decision won't make a difference.",1,6,2,1,14
+6_14_1_2,Again we need to make sure to vote blue as others may not vote blue even draw is blue.,3,6,1,2,14
+6_14_3_2,"Or decision determines the committee's final answer. Last round one of the teams had picked a blue ball and still voted red, so the comittee won. Or because replacement is allowed in this part all teams had a red ball. Our best bet in my opinion is to choose blue.",1,6,3,2,14
+6_15_3_2,"It is with replacement now, so it is the same compared to the previous rounds, both urns have balls in it, going for the higher chances that ours is the correct one",1,6,3,2,15
+6_15_2_2,"Well it is without a replacement, so the blue urn must be empty and it must be red urn",1,6,2,2,15
+6_15_2_1,2/3 chances that it is a blue urn,1,6,2,1,15
+6_15_3_1,I am going for the higher chances that our pick is the correct one,1,6,3,1,15
+6_15_4_1,Going for the higher chances that we have picked the correct one,1,6,4,1,15
+6_15_1_1,"The chances are higher that we are correct, so it must be the blue urn if true",1,6,1,1,15
+6_15_1_2,"Last time was blue, so there the blue balls are now less, I am going for red again the chances are 2/3",1,6,1,2,15
+6_16_2_2,"Since we have drawn a blue ball, let's just pick blue, even though this will determine the whole committees decision.",1,6,2,2,16
+6_16_3_1,"We see red, let's pick red.",1,6,3,1,16
+6_16_4_1,"I'd just pick the colour we see, even though chances are that we pick the wrong colour and determine the teams decision.",1,6,4,1,16
+6_16_2_1,"Since we have drawn a red ball, we should just vote for red.",1,6,2,1,16
+6_16_1_1,It's more likely that we got a red ball if it's a red urn. Someone else can always pick blue as they draw blue for sure.,2,6,1,1,16
+6_16_3_2,"Let's just go for what we see, even though we will consequently determine the teams decision.",1,6,3,2,16
+6_16_1_2,I'm not sure if we should pick blue even though we draw a blue ball. If we pick blue it would determine the whole team's decision. That's why I'm suggesting red.,2,6,1,2,16
+6_17_3_2,"I don't believe that I'm communicating to a real team partner anymore (more an automated answer), but what else should I guess than red.",1,6,3,2,17
+6_17_3_1,It doesn't matter whether you take a ball with or without replacement. There is a chance of 8/27 that at least one team get a blue ball from a red urn.,1,6,3,1,17
+6_17_2_2,Perhaps we have luck.,0,6,2,2,17
+6_17_1_1,I see a red ball - what else should I guess as the color of the urn given the rules.,1,6,1,1,17
+6_17_2_1,Please tell me if you are a real player and no fake account.,0,6,2,1,17
+6_17_1_2,"The problem is following: At least one of the three teams will get a blue ball. This team - normally - will take blue as the guess of the color of the urn. So the overall teams' guess is blue, even if just one blue ball appeared (and this would mean that the actual color of the urn is red). So we should take red. Trust me - if it is actually a blue urn, another blue ball must be seen by another of the three teams. And this team will choose blue as their guess. This is enough for taking blue as the overall team voting.",2,6,1,2,17
+6_18_1_1,"the probability for each ball is 33,33%, since we picked a blue ball its likely that the urn ist blue. however since there are no replacements on of the 3 team will unavoidably get the other color and if even one team votes for the other color the wong color will be the comittees guess.",2,6,1,1,18
+6_18_2_2,"i think its probably better if we dont pick the same colour, so if i pick blue you should pick red",0,6,2,2,18
+6_18_4_1,lets hope we got the 2/3 chance of getting the right coloured ball,1,6,4,1,18
+6_18_3_2,lets hope that we got the 2/3 chance of picking the right colour,1,6,3,2,18
+6_18_3_1,"now that we're playing with replacement, the probability that its a blue urn ist higher, so lets go with blue",1,6,3,1,18
+6_18_1_2,if everyone chose the color of the ball they picked the probability of getting 2€ would be 0%,2,6,1,2,18
+6_19_1_1,"if its blue someone else has blue too, so they might vote blue and the end decission is true but if they both have red we should vote for red so that its true in that case too",2,6,1,1,19
+6_19_2_2,if tehre are 4 blues someone will say blue if there are 4 reds we should go for red so red is the logical decission here,2,6,2,2,19
+6_19_3_1,just the higher chance of getting the right color,1,6,3,1,19
+6_19_2_1,if tehre are 4 blues then hopefully somebody will say blue if tehre are only two chances are higher if we say red,2,6,2,1,19
+6_19_4_1,is it over yet?,0,6,4,1,19
+6_19_3_2,just take the higher chance here and if both others get blue they will vote for it,1,6,3,2,19
+6_19_1_2,worked last time so same argumentation,2,6,1,2,19
+6_2_2_1,twice as much red balls as blue balls,1,6,2,1,2
+6_2_4_1,bigger chance,1,6,4,1,2
+6_20_3_2,again red if the other draw blue they may not vote blue,2,6,3,2,20
+6_20_4_1,"Given the voting system, voting red is safe. If any other team votes blue it will be blue",2,6,4,1,20
+6_20_1_2,i would choose the expected more likely result,1,6,1,2,20
+6_20_1_1,"on of tree is red  for a red urn, if it is red all must choose red so i suggest red",1,6,1,1,20
+6_20_2_1,"as a red one picked, i expectd a red urne ö",1,6,2,1,20
+6_20_2_2,"four red ones,two blue ones, i suggest a red urne",1,6,2,2,20
+6_20_3_1,based on probability and what others will do i would always choose red,2,6,3,1,20
+6_21_1_1,our team picked a blue ball so more likely our urn is blue,1,6,1,1,21
+6_22_3_2,I guess it's a blue urn- Let's believe in it,0,6,3,2,22
+6_22_4_1,I think it's a red urn-because there are four balls of the same colour and we give the ball back in the urn I think it's a red urn- Let's believe in it!,1,6,4,1,22
+6_22_2_1,I think it's a red urn because we picked a red ball The chance is higher that we picked a red ball then a blue one I'm very sure that it is a red ur n Because of the distribution of the balls,1,6,2,1,22
+6_22_1_2,I think it is a red urn because we took a red ball In the urn are more red balls and then is the chance higher to take a red ball I think it is a red urn,1,6,1,2,22
+6_22_3_1,I think it's either a red urn because we picked a red ball,1,6,3,1,22
+6_22_1_1,"I thin it can be a blue ball because blue urn has more blue balls, but I'm not totally sure",1,6,1,1,22
+6_22_2_2,I think it's a blue urn because of the distribution of the balls The chance is higher to pick a blue ball because there are probably four of them in the urn and two red ones I would vote for the blue urn,1,6,2,2,22
+6_23_2_1,Lets stick with it. Higher chances.,1,6,2,1,23
+6_23_4_1,PURE LUCK!,0,6,4,1,23
+6_23_1_1,Lets stick with the usally expected more likely  urn,1,6,1,1,23
+6_23_1_2,More likely to be red. Lets stick with it,1,6,1,2,23
+6_23_3_1,Lets believe in it;),0,6,3,1,23
+6_23_2_2,Lets stick with it. Higher chances.,1,6,2,2,23
+6_24_2_1,Choosing red when you see a red ball is the only logic consequence. One blue vote makes the committee blue vote,2,6,2,1,24
+6_24_3_2,With the new rule there is more chance of each individual to observe the wrong color. The choice of red is more hard. Only if all choose red  it should b red.,0,6,3,2,24
+6_24_3_1,"I think as the new rule it would be more chance of each member to observe a wrong color. Since the comment of red should meet more critique, I suggest to choose red.",0,6,3,1,24
+6_24_1_1,"In my opinion, if there is another person with blue they may be afraid of voting blue so we should vote blue to make sure.",3,6,1,1,24
+6_24_4_1,After all of the round before I suggest us to choose red. The committe will choose red only when all of the teams choose red.,0,6,4,1,24
+6_24_2_2,If the urn is blue there would be others who choose blue. Only when all choose red there will be red which means majority observes red.,2,6,2,2,24
+6_24_1_2,We should vote blue again for the same reason,3,6,1,2,24
+6_3_1_1,"the chance that it is blue is 2/3, so I go for blue otherwise one team will get red for sure, even if the urn is blue...so I don't know what is the best strategy",2,6,1,1,3
+6_3_2_2,There is a higher change blue is the color of the urn. But I am voting for the opposite as 2 teams get the wrong color for sure It is pure luck anyway :),1,6,2,2,3
+6_3_3_1,"Drawing WITH replacement, so the chance is always higher if we pick what we see therefore I am going for red",1,6,3,1,3
+6_3_3_2,"Lets stick with the color we have drawn, the chances are higher",1,6,3,2,3
+6_3_2_1,"I am voting for the opposite color as 2 teams have to do it in order to have a correct committee decision Of course there is a higher chance that blue is the color but we don't know, so it is pure luck after all",1,6,2,1,3
+6_4_4_1,last two rounds were blue so I dont know what color we shoul guess :D,0,6,4,1,4
+6_4_2_2,"Red, always red! #teamred #gowildreds",0,6,2,2,4
+6_4_2_1,Take alsways read cause the chance of winning is higher and one other team will vote bleu! *red,2,6,2,1,4
+6_4_3_2,I dont know the best way to win in this part. Thought always red would be as good as in the parts before but before we had a blue urn..,0,6,3,2,4
+6_4_1_2,Let's take red cause if the urn is red and we got the opposite color aaaand we take blue the decision will be blue. Let's hope the other team isnt that intelligent (if they got blue as well) and will take the real color.,2,6,1,2,4
+6_4_1_1,I think its a good idea if we take the ball color as our decision color. Others will probably take their real color and at least one other has blue.,2,6,1,1,4
+6_4_3_1,Just take red please!! Its the only way to get 2€!,1,6,3,1,4
+6_5_2_2,"i think when thee red ball is picked you should vote red because if another team votes blue, the decision will be blue in the end anyways thus voting for blue is too risky just vote red to be safe",2,6,2,2,5
+6_5_3_2,"Same logic, vote red cheers",2,6,3,2,5
+6_5_1_1,"the probabiliity of picking the red ball from red urn was higher this means that the urn is more likely to be red now comes the important part!!! you should vote red because all members need to vote red in order to vote for red if ANYONE votes blue, we are screwed",1,6,1,1,5
+6_5_4_1,"Deutschland Deutschland uber alles, uber alles in der Welt Wenn es stets zu Schutz und Trutze Bruderlich zusammenhalt Von der Maas bis an die Memel Von der Etsch bis an den Belt",0,6,4,1,5
+6_5_3_1,i think when the ball is red it always makes more sense to vote for red because if you vote for blue you can fuck up the entire decision don’t worry about blu as others may vote blue just go with red to be safe cheers,2,6,3,1,5
+6_5_2_1,When its red ball you should vote red its too obvious and probably no explanation is needed even if the urn is blue somebody (4 teams ACTUALLY) will vote blue and therefore we will win anyways but if its red then EVERY team should vote red therefore going for red is a safe choice here,2,6,2,1,5
+6_5_1_2,"if the urn is red, then everyone needs to vote RED, because if only 1 votes blue, our decision will be BLUE So please vote red :) cheers",1,6,1,2,5
+6_6_3_2,no clue,0,6,3,2,6
+6_6_1_2,Blue urn with higher chance,1,6,1,2,6
+6_8_1_1,"We see a red ball, so we should vote for it. If the other two teams see a blue ball, they will vote for it. But other decision will not have a negative influence. Therefore, we should take red to not diminish the option of a red urn.",2,6,1,1,8
+6_8_1_2,"If the other two teams have each a blue ball, at least one will vote for it. But with that decision we will not eliminate the chance of an red urn.",2,6,1,2,8
+6_8_2_1,"Hey! Let us stick with red. I cannot tell you why, but I have a good feeling about it. Cheers.",0,6,2,1,8
+6_8_3_2,Hey! Let's try for red. There is now a higher probability that we see the wrong colour.,1,6,3,2,8
+6_8_2_2,Hey!,0,6,2,2,8
+6_8_3_1,Heeey! Higher probability for blue. So we should stick with the colour we have picked. Cheers. :),1,6,3,1,8
+6_9_1_1,"At least one other team has a blue ball. This team will very likely choose the blue urn. Thus, it has no consequence, which urn we choose, because the blue urn will be picked anyway. If both other teams have blue balls, the chances for this case is even greater. So I would pick red, to reach the consens, if one other team has a red ball and the urn is read.",2,6,1,1,9
+6_9_1_2,"Wenn jedes Team seine Kugelfarbe wählt, hat man immer die blaue Urne. Und daher eine 50% Chance zu gewinnen. Wenn jedes Team immer rot wählt auch. Doch wenn wir immer rot wählen und die anderen Teams immer ihre Farbe, haben wir eine 66% Trefferquote. Daher immer rot wählen!!! Man erhöht seine Chancen auf eine richtige Kugel nicht, wenn man blau wählt! *Richtige Urne",2,6,1,2,9
+6_9_2_1,"Menschen sind unberechenbar, wenn sie vor (Wahl-) Urnen stehen. Ich wähle rot, um dem Konsens eine Chance zu geben.",2,6,2,1,9
+6_9_3_2,"What you wrote is not correct, but it would take to long to explain why. The only thing that changed in a POSITIVE way is, that the chances are higher, that every team has the RIGHT ball. The conclusion is the same: Pick your own colour",1,6,3,2,9

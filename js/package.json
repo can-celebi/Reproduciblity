@@ -1,0 +1,15 @@
+{
+  "name": "llm-classification-study",
+  "version": "1.0.0",
+  "description": "LLM classification stability study",
+  "main": "run.js",
+  "scripts": {
+    "start": "node run.js",
+    "merge": "node merge.js",
+    "test": "node run.js 1 1"
+  },
+  "dependencies": {
+    "openai": "^4.0.0",
+    "csv-parse": "^5.5.0"
+  }
+}
