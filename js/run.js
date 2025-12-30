@@ -199,11 +199,42 @@ function sleep(ms) {
 }
 
 /**
- * Make API call with retry, rotating through resources on failure
+ * Detect error types
+ */
+function getErrorType(error) {
+    // Content filter - 400 error with specific message
+    if (error.status === 400 && 
+        (error.message?.toLowerCase().includes('content') ||
+         error.message?.toLowerCase().includes('filter') ||
+         error.message?.toLowerCase().includes('policy'))) {
+        return 'content_filter';
+    }
+    
+    // Rate limit
+    if (error.status === 429 || 
+        error.code === 'rate_limit_exceeded' ||
+        error.message?.toLowerCase().includes('rate')) {
+        return 'rate_limit';
+    }
+    
+    // Transient/server errors
+    if (error.status >= 500 || error.code === 'ECONNRESET' || error.code === 'ETIMEDOUT') {
+        return 'transient';
+    }
+    
+    return 'other';
+}
+
+/**
+ * Make API call with smart retry logic:
+ * - Content filter errors: Try each resource once (no waiting), then fail fast
+ * - Rate limit errors: Switch resource + brief pause
+ * - Transient errors: Exponential backoff + retry
  */
 async function callWithRetry(systemPrompt, userText, schema, instanceId) {
     let lastError;
     let clientWrapper = clientPool.getNextClient();
+    const triedResources = new Set();
     
     for (let attempt = 1; attempt <= CONFIG.maxRetries; attempt++) {
         try {
@@ -229,32 +260,48 @@ async function callWithRetry(systemPrompt, userText, schema, instanceId) {
         } catch (error) {
             lastError = error;
             clientPool.recordError(clientWrapper);
+            triedResources.add(clientWrapper.name);
             
-            const isRateLimit = error.status === 429 || 
-                               error.code === 'rate_limit_exceeded' ||
-                               error.message?.toLowerCase().includes('rate');
+            const errorType = getErrorType(error);
             
-            console.error(`  [${clientWrapper.name}] Attempt ${attempt}/${CONFIG.maxRetries} failed for instance ${instanceId}: ${error.message}`);
+            console.error(`  [${clientWrapper.name}] Attempt ${attempt}/${CONFIG.maxRetries} failed for instance ${instanceId} (${errorType}): ${error.message.substring(0, 100)}`);
             
             if (attempt < CONFIG.maxRetries) {
-                if (isRateLimit) {
-                    // On rate limit, try a different resource immediately
+                if (errorType === 'content_filter') {
+                    // Content filter: try another resource WITHOUT waiting
+                    // If we've tried all resources, fail immediately
+                    if (triedResources.size >= clientPool.clients.length) {
+                        console.log(`  ❌ Content filter on all ${triedResources.size} resources. Skipping instance.`);
+                        break;
+                    }
+                    // Find a resource we haven't tried yet
+                    const untried = clientPool.clients.find(c => !triedResources.has(c.name));
+                    if (untried) {
+                        clientWrapper = untried;
+                        console.log(`  🔄 Content filter - trying ${clientWrapper.name} (no wait)...`);
+                    } else {
+                        break;
+                    }
+                    // No sleep - try immediately
+                    
+                } else if (errorType === 'rate_limit') {
+                    // Rate limit: switch resource + brief pause
                     console.log(`  ⚠️ Rate limit on ${clientWrapper.name}, switching resource...`);
                     clientWrapper = clientPool.getHealthiestClient();
-                    await sleep(1000);  // Brief pause before trying another
+                    await sleep(1000);
+                    
                 } else {
-                    // Other errors: exponential backoff
+                    // Transient/other errors: exponential backoff
                     const delay = CONFIG.initialRetryDelay * Math.pow(2, attempt - 1);
                     console.log(`  Waiting ${delay / 1000}s before retry...`);
                     await sleep(delay);
-                    // Also try a different resource
                     clientWrapper = clientPool.getNextClient();
                 }
             }
         }
     }
     
-    return { success: false, error: lastError };
+    return { success: false, error: lastError, errorType: getErrorType(lastError) };
 }
 
 // =============================================================================
@@ -287,12 +334,13 @@ async function classifyInstance(instance, runNumber) {
             input,
             output: null,
             hasError: true,
+            errorType: 'missing_config',
             error: `Missing ${!systemPrompt ? "prompt" : ""}${!systemPrompt && !schema ? " and " : ""}${!schema ? "schema" : ""} for key: ${key}`
         };
     }
     
     const startTime = Date.now();
-    const { success, response, error, resourceName } = await callWithRetry(systemPrompt, input, schema, id);
+    const { success, response, error, errorType, resourceName } = await callWithRetry(systemPrompt, input, schema, id);
     const endTime = Date.now();
     
     if (!success) {
@@ -309,11 +357,13 @@ async function classifyInstance(instance, runNumber) {
             seed: CONFIG.seed,
             temperature: CONFIG.temperature,
             fingerprint: null,
+            resource: null,
             duration: (endTime - startTime) / 1000,
             numInputTokens: null,
             numOutputTokens: null,
             logprobs: null,
             hasError: true,
+            errorType: errorType || 'unknown',
             error: error?.message || "Unknown error"
         };
     }
@@ -344,12 +394,13 @@ async function classifyInstance(instance, runNumber) {
         seed: CONFIG.seed,
         temperature: CONFIG.temperature,
         fingerprint: response.system_fingerprint,
-        resource: resourceName,  // Track which resource was used
+        resource: resourceName,
         duration: parseFloat(((endTime - startTime) / 1000).toFixed(3)),
         numInputTokens: response.usage.prompt_tokens,
         numOutputTokens: response.usage.completion_tokens,
         logprobs: choice.logprobs.content,
         hasError: parseError !== null,
+        errorType: parseError ? 'parse_error' : null,
         error: parseError
     };
 }
@@ -395,25 +446,40 @@ async function processBatch(instances, runNumber, outputPath, existingResults) {
 // MAIN EXECUTION
 // =============================================================================
 
-async function executeRun(instances, runNumber, outputPath) {
+async function executeRun(instances, runNumber, outputPath, errorsOnly = false) {
     console.log(`\n${"=".repeat(60)}`);
-    console.log(`RUN ${runNumber}`);
+    console.log(`RUN ${runNumber}${errorsOnly ? ' (ERRORS ONLY)' : ''}`);
     console.log(`${"=".repeat(60)}`);
     
     const existingResults = loadExistingResults(outputPath);
     
-    const toProcess = instances.filter(inst => {
-        const id = parseInt(inst.id);
-        return !existingResults.completed.has(id) || existingResults.errors.has(id);
-    });
+    let toProcess;
+    if (errorsOnly) {
+        // Only process instances that had errors
+        toProcess = instances.filter(inst => {
+            const id = parseInt(inst.id);
+            return existingResults.errors.has(id);
+        });
+        console.log(`\nMode: Retrying errors only`);
+    } else {
+        // Normal mode: process new instances + retry errors
+        toProcess = instances.filter(inst => {
+            const id = parseInt(inst.id);
+            return !existingResults.completed.has(id) || existingResults.errors.has(id);
+        });
+    }
     
     console.log(`\nTotal instances: ${instances.length}`);
     console.log(`Already completed: ${existingResults.completed.size}`);
-    console.log(`Previous errors to retry: ${existingResults.errors.size}`);
+    console.log(`Previous errors: ${existingResults.errors.size}`);
     console.log(`To process this session: ${toProcess.length}\n`);
     
     if (toProcess.length === 0) {
-        console.log(`Run ${runNumber} already complete!`);
+        if (errorsOnly) {
+            console.log(`No errors to retry in run ${runNumber}!`);
+        } else {
+            console.log(`Run ${runNumber} already complete!`);
+        }
         return;
     }
     
@@ -458,9 +524,13 @@ async function executeRun(instances, runNumber, outputPath) {
     
     let totalInputTokens = 0;
     let totalOutputTokens = 0;
+    const errorTypes = {};
     for (const r of finalState.all) {
         if (r.numInputTokens) totalInputTokens += r.numInputTokens;
         if (r.numOutputTokens) totalOutputTokens += r.numOutputTokens;
+        if (r.hasError && r.errorType) {
+            errorTypes[r.errorType] = (errorTypes[r.errorType] || 0) + 1;
+        }
     }
     const avgTokens = finalState.completed.size > 0 
         ? Math.round((totalInputTokens + totalOutputTokens) / finalState.completed.size)
@@ -469,6 +539,9 @@ async function executeRun(instances, runNumber, outputPath) {
     console.log(`\n--- Run ${runNumber} Summary ---`);
     console.log(`Completed: ${finalState.completed.size}/${instances.length}`);
     console.log(`Errors: ${finalState.errors.size}`);
+    if (Object.keys(errorTypes).length > 0) {
+        console.log(`Error breakdown: ${Object.entries(errorTypes).map(([k,v]) => `${k}=${v}`).join(', ')}`);
+    }
     console.log(`Tokens: ${totalInputTokens.toLocaleString()} in + ${totalOutputTokens.toLocaleString()} out = ${(totalInputTokens + totalOutputTokens).toLocaleString()} total`);
     console.log(`Avg tokens/request: ${avgTokens}`);
     
@@ -477,8 +550,13 @@ async function executeRun(instances, runNumber, outputPath) {
 
 async function main() {
     const args = process.argv.slice(2);
-    const startRun = parseInt(args[0]) || 1;
-    const endRun = parseInt(args[1]) || startRun;
+    
+    // Parse flags
+    const errorsOnly = args.includes('--errors-only') || args.includes('-e');
+    const filteredArgs = args.filter(a => !a.startsWith('-'));
+    
+    const startRun = parseInt(filteredArgs[0]) || 1;
+    const endRun = parseInt(filteredArgs[1]) || startRun;
     
     console.log(`\n${"=".repeat(60)}`);
     console.log(`LLM CLASSIFICATION STABILITY STUDY`);
@@ -489,6 +567,9 @@ async function main() {
     console.log(`Batch size: ${CONFIG.batchSize}`);
     console.log(`Resources: ${clientPool.clients.length}`);
     console.log(`Runs: ${startRun} to ${endRun}`);
+    if (errorsOnly) {
+        console.log(`Mode: ERRORS ONLY (retrying previous errors)`);
+    }
     console.log(`Start time: ${new Date().toISOString()}`);
     
     const scriptDir = __dirname;
@@ -516,7 +597,7 @@ async function main() {
     
     for (let run = startRun; run <= endRun; run++) {
         const outputPath = path.join(outputDir, `run_${String(run).padStart(3, "0")}.jsonl`);
-        await executeRun(instances, run, outputPath);
+        await executeRun(instances, run, outputPath, errorsOnly);
     }
     
     const totalMinutes = (Date.now() - startTime) / 1000 / 60;

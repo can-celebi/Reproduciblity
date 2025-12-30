@@ -1,71 +1,216 @@
 id,localId,dataset,task,input
-1,test_p1_001,p1,promise,"I promise to cooperate with you in the next round no matter what happens."
-2,test_p1_002,p1,promise,"Maybe I will choose A, but I am not really sure yet about my decision."
-3,test_p1_003,p1,promise,"I will not betray you, you have my word on that for sure."
-4,test_p1_004,p1,promise,"Let us see what happens, I will decide when the time comes later."
-5,test_p1_005,p1,promise,"I will pick B if you pick B too, that is my commitment."
-6,test_p1_006,p1,promise,"You can count on me, I will do exactly what I said before."
-7,test_p1_007,p1,promise,"I might cooperate, or I might not, it depends on the situation."
-8,test_p1_008,p1,promise,"I will never betray you, that is my solemn commitment to you."
-9,test_p1_009,p1,promise,"I am thinking about picking option C but have not decided yet."
-10,test_p1_010,p1,promise,"My word is my bond, I will choose cooperate for certain."
-11,test_p2_001,p2,promise,"[Player 1]: I will choose cooperate for sure.\n[Player 2]: Okay, I trust you completely.\n[Player 3]: Let us all work together on this!"
-12,test_p2_002,p2,promise,"[Player 1]: What should we do here?\n[Player 2]: I do not know, maybe we should think more?"
-13,test_p2_003,p2,promise,"[Player 1]: I will pick X for certain.\n[Player 2]: I will pick X too, I commit to that."
-14,test_p2_004,p2,promise,"[Player 1]: Not sure what to pick here.\n[Player 2]: Me neither honestly.\n[Player 3]: Let us just make a choice."
-15,test_p2_005,p2,promise,"[Player 1]: I give you my word, I will cooperate.\n[Player 2]: Same here, I commit to that.\n[Player 3]: Count me in too, I will cooperate!"
-16,test_p2_006,p2,promise,"[Player 1]: I hereby commit to option A.\n[Player 2]: No commitment from me yet."
-17,test_p2_007,p2,promise,"[Player 1]: Trust me on this!\n[Player 2]: I trust you!\n[Player 3]: I need more time to decide."
-18,test_p2_008,p2,promise,"[Player 1]: Whatever works.\n[Player 2]: I commit to X.\n[Player 3]: I also commit to X."
-19,test_p2_009,p2,promise,"[Player 1]: I am going with option B.\n[Player 2]: Good choice, I will follow."
-20,test_p2_010,p2,promise,"[Player 1]: Let us coordinate on Y.\n[Player 2]: Agreed, Y it is.\n[Player 3]: I will also pick Y."
-21,test_l1_001,l1,level,"I will vote for candidate A because I like their policies the most."
-22,test_l1_002,l1,level,"Most people will vote for B, so I should vote for C to make my vote count more."
-23,test_l1_003,l1,level,"If others think strategically, they will vote for B, so I will vote for A instead."
-24,test_l1_004,l1,level,"I am just going to vote for whoever I prefer, regardless of what others do."
-25,test_l1_005,l1,level,"Given the polls, strategic voters will shift to C, anticipating others will too."
-26,test_l1_006,l1,level,"Looking at the strategic situation, if sophisticated voters vote B, then I should too."
-27,test_l1_007,l1,level,"My favorite is candidate A, so that is who gets my vote. Simple decision."
-28,test_l1_008,l1,level,"Everyone will vote strategically for C, so I will do the same thing."
-29,test_l1_009,l1,level,"Candidate D has the best platform, voting for them regardless of strategy."
-30,test_l1_010,l1,level,"If I think about what others think, B becomes the obvious strategic choice."
-31,test_l2_001,l2,level,"The option with the highest payoff seems best, so I will pick that one."
-32,test_l2_002,l2,level,"My partner will probably pick the high payoff option, so I should coordinate."
-33,test_l2_003,l2,level,"Thinking about what my partner thinks I will do, I should pick the second option."
-34,test_l2_004,l2,level,"I will just randomly pick something without much thought."
-35,test_l2_005,l2,level,"Considering multiple levels of reasoning about beliefs, option X seems optimal."
-36,test_l2_006,l2,level,"This is a pure coordination game, so I will pick what seems most obvious."
-37,test_l2_007,l2,level,"Thinking one step ahead, I should pick what coordinates best."
-38,test_l2_008,l2,level,"Pure random choice here, just going with my gut feeling."
-39,test_l2_009,l2,level,"The salient option is clearly the best choice for coordination."
-40,test_l2_010,l2,level,"My partner and I both want to coordinate, so the high payoff is natural."
-41,test_l2_011,l2,belief,"I think my partner will focus on getting the highest payoff for themselves."
-42,test_l2_012,l2,belief,"The label X really stands out, so my partner will probably pick that."
-43,test_l2_013,l2,belief,"My partner will not care about labels, they will just look at payoff numbers."
-44,test_l2_014,l2,belief,"I do not think my partner has any particular strategy in mind here."
-45,test_l2_015,l2,belief,"Low payoff options are rarely chosen, so my partner will avoid those."
-46,test_l2_016,l2,belief,"The special symbol is very noticeable, I bet my partner sees it first."
-47,test_l2_017,l2,belief,"My partner will probably just pick randomly without much thought."
-48,test_l2_018,l2,belief,"I expect my partner to go for the option that stands out visually."
-49,test_l2_019,l2,belief,"My partner will reason about payoffs first, labels second."
-50,test_l2_020,l2,belief,"The high payoff is too obvious, my partner will definitely choose it."
-51,test_l3_001,l3,level,"I will just pick 50 because it is right in the middle of 0 and 100."
-52,test_l3_002,l3,level,"Most people will guess around 50, so 2/3 of 50 is about 33."
-53,test_l3_003,l3,level,"If everyone thinks like level-1 and picks 33, I should pick 22."
-54,test_l3_004,l3,level,"The Nash equilibrium is 0, because iterated best response converges there."
-55,test_l3_005,l3,level,"Going deeper, if level-2 picks 22, level-3 picks 15, level-4 picks 10."
-56,test_l3_006,l3,level,"If I think hard enough, the answer approaches 0, so I will pick 1."
-57,test_l3_007,l3,level,"My lucky number is 7, so that is my pick for this game."
-58,test_l3_008,l3,level,"2/3 of 2/3 of 2/3 of 50 is around 15, so I will pick that."
-59,test_l3_009,l3,level,"42 is a good number, so I will pick that for this game."
-60,test_l3_010,l3,level,"Starting from 50, applying 2/3 twice gives me about 22."
-61,test_l3_011,l3,belief,"I think naive players would randomly guess numbers averaging around 50."
-62,test_l3_012,l3,belief,"People who do not think strategically probably average around 40-45."
-63,test_l3_013,l3,belief,"Random guessers would probably be uniformly distributed, so average 50."
-64,test_l3_014,l3,belief,"I think level-0 thinkers would pick numbers around 30-35."
-65,test_l3_015,l3,belief,"Naive players probably anchor on 50 and maybe adjust down a bit."
-66,test_l3_016,l3,belief,"Average uninformed guess is probably somewhere in the 55-60 range."
-67,test_l3_017,l3,belief,"I would estimate level-0 average is around 25-30."
-68,test_l3_018,l3,belief,"No idea what others think, maybe 50 is a reasonable guess."
-69,test_l3_019,l3,belief,"Level-0 players are basically random, centered at 50."
-70,test_l3_020,l3,belief,"Beginners probably think numbers around 60 are good choices."
+1,1_5_3_1,l1,level,"Once again I'd take red, because if any other is taking blue, it'll be blue anyways"
+2,6_8_1_2,l1,level,"If the other two teams have each a blue ball, at least one will vote for it. But with that decision we will not eliminate the chance of an red urn."
+3,5_21_2_2,l1,level,same as before by red :D
+4,3_1_4_1,l1,level,Higher chance to have the red urn. However I think every team will think in the same way and there is no chance that the committe gets it right... Red is less risky.
+5,1_8_3_1,l1,level,"It is more likely than not that we have a correct ball Nevertheless, we could be the deciding vote for blue if the other two choose red"
+6,4_2_4_2,l1,level,we should pick red ( the oposite) to reach a consensus becaus eeveryone will think his decision is right
+7,2_9_4_2,l1,level,"If red is right, we have to vote for it in order to win. If blue is right, at least one of the teams will for it, so we win as well vote*"
+8,2_4_3_1,l1,level,"more likely that we are a team observing the right urn, and bigger chance of same colored ball being drawn from urn"
+9,6_9_3_2,l1,level,"What you wrote is not correct, but it would take to long to explain why. The only thing that changed in a POSITIVE way is, that the chances are higher, that every team has the RIGHT ball. The conclusion is the same: Pick your own colour"
+10,2_6_1_1,l1,level,No clue so far. Ask me again next time.
+11,3_4.3.7,l2,belief,"Team: 2 
+Game: SL 
+Decision: X 
+Message: die maschine nimmt uns hier die schewre entscheidung ab ich X und du Y. vielleicht erkennst du ja ein muster ;P wenn immer 2 verschiedene möglichkeiten da sind, haben wir ne 50% chance zu gewinnen"
+12,12_1.12.2,l2,belief,"Team: 2 
+Game: AM2 
+Decision: § 
+Message: Nur weil der Teil der Runde weiße Farbe hat unbd es wahrscheinlicher ist, dass das andere Tem es angibt.. außerdem gewinnt das andere Team mehr, wenn es sich zwischen den beiden Antworten (6, 5) entscheidet"
+13,7_9.7.3,l2,belief,"Team: 2 
+Game: ASL 
+Decision: Y 
+Message: Ich würde Alternative Y vorschlagen. Das andere Team denkt bestimmt (war auch mein erster Gedanke), dass wir die Möglichkeit nehmen in welcher wir mehr Geld kriegen und nehmen deswegen weniger Geld, wenn wir jetzt diese Möglichkeit nehmen kriegen beide etwas"
+14,13_5.13.7,l2,belief,"Team: 1 
+Game: SL 
+Decision: X 
+Message: hier würde ich einfach die erste antwort nehmen"
+15,18_7.18.2,l2,belief,"Team: 1 
+Game: S1 
+Decision: § 
+Message: Der weiße Kreis ist der einzige der sich von den drei unterscheidet, es ist also einfacher sich auf das Offensichtliche zu einigen, zumal die Talerverteilung eh überall gleich ist"
+16,5_2.5.1,l2,belief,"Team: 1 
+Game: ASL 
+Decision: X 
+Message: Was für eine dämliche Situation. Ist doch beides eigentlich egal, als würden die 0,10 Taler den Bock fett machen. Lass uns halt Y nehmen, dann springt eben mehr für die anderen raus."
+17,20_7.20.4,l2,belief,"Team: 2 
+Game: AM2 
+Decision: $ 
+Message: Genau das gleiche wie zuvor. Sie würden glaube ich das erste nehmen weil sie mehr taler hätten als wir"
+18,7_6.7.4,l2,belief,"Team: 2 
+Game: S2 
+Decision: $ 
+Message: oh, des is mies oder #, is dann glückssache"
+19,6_5.6.1,l2,belief,"Team: 1 
+Game: ALL 
+Decision: X 
+Message: vllt. sollten wir uns die 5 taler geben, weil die anderen sich wahrschienlich mehr taler geben. ich hoffe mal, du verstehst was ich meine?"
+20,3_4.3.1,l2,belief,"Team: 2 
+Game: ALL 
+Decision: X 
+Message: normalerweise würde man in einer solchen situation den eigenen vorteil wählen da aber bei einer ungleichen entscheidung hier keiner etwas bekommt, würde ich das auswählen dem computer überlassen da wir nicht wissen können, welche entscheidung das andere team amcht sollten wir die auswahl dem pc überlassen. cih sollte X nehmen und du Y so ist die chance 50% zu gewinnen."
+21,18_7.18.2,l2,level,"Team: 1 
+Game: S1 
+Decision: § 
+Message: Der weiße Kreis ist der einzige der sich von den drei unterscheidet, es ist also einfacher sich auf das Offensichtliche zu einigen, zumal die Talerverteilung eh überall gleich ist"
+22,13_4.13.3,l2,level,"Team: 1 
+Game: AML 
+Decision: X 
+Message: Entsprechend meiner bis jetzt vorgeschlagenen Stratagie, wählen wir die Alternative X. Es wäre natürlich blöd, wenn das andere Team dieselbe Überlagung macht."
+23,20_7.20.3,l2,level,"Team: 2 
+Game: ASL 
+Decision: X 
+Message: ich glaub team 2 wird die alternative x wählen, weil sie mehr Taler bekommen würden als wir oder eventuell alternative y weil sie genau das gleiche denken wie wir haha :D"
+24,5_6.5.1,l2,level,"Team: 1 
+Game: ALL 
+Decision: Y 
+Message: es stellt sich die frage was für eine art mensch gegen uns spielt.. ich würde einfach mal riskieren und die Y nehmen da wir davon mehr haben"
+25,13_3.13.2,l2,level,"Team: 1 
+Game: AM2 
+Decision: $ 
+Message: geld mag jeder"
+26,1_4.1.4,l2,level,"Team: 1 
+Game: S2 
+Decision: $ 
+Message: hier würde ich vermuten, dass man intuitiv eher die erstere der gleichartigen chancen wählt"
+27,6_4.6.5,l2,level,"Team: 1 
+Game: ASL 
+Decision: Y 
+Message: weiß nicht, ob team 2 mehr für sich auswählen werden? sehr wahrscheinlich denken sie umkehrt."
+28,15_6.15.2,l2,level,"Team: 2 
+Game: AM4 
+Decision: # 
+Message: Genau die gleiche denkweise? Also lieber das nehmen was für uns schlechter ist? Ich weiß, nicht ob das funktioniert oder ob die das genauso machen werden dann hätten wir ja immer verloren also ich denk das weiße auf keinen fall"
+29,3_4.3.2,l2,level,"Team: 2 
+Game: AM4 
+Decision: $ 
+Message: auch hier das selbe spiel. eine faire lösung kann nicht gewählt werden. also sollten wir $ und # wählen ist die unfairste variante, die fällt im prinzip raus. ich nehme $ und du #. ich nehme natürlich nur (für alle fälle) fals du nicht einen mega überzeugenden vorschlag hast"
+30,12_1.12.2,l2,level,"Team: 2 
+Game: AM2 
+Decision: § 
+Message: Nur weil der Teil der Runde weiße Farbe hat unbd es wahrscheinlicher ist, dass das andere Tem es angibt.. außerdem gewinnt das andere Team mehr, wenn es sich zwischen den beiden Antworten (6, 5) entscheidet"
+31,33,l3,belief,normally people will choose the number 10-90 I think but I not surejust use your  rst reection to think about other people
+32,48,l3,belief,i would go for something high as it is unlikely that lots of people will go for something very lowand so that means we more likely to get closer to the averagebut im not sure really! that would be my suggestion
+33,17,l3,belief,because it is relatively close to the middle?
+34,25,l3,belief,"I'm no mathematician so I don't know what number to go for exactly which would give thegreatest chace*chanceso I'm just going with 50, unless you have a di erent tacticIf you're not sure either I will just go with 50 still"
+35,80,l3,belief,i think a number around this number will possible give us the right ans as most people willchoose above 50
+36,8,l3,belief,"As the range of numbers is between 0 - 100, I think most of guys might be choosing a number close to 50, and since the two thirds of the average is choosen, the target number may be nearer to 40. it's just my thinking. Not sure really in this way this round works.. Waiting to see your suggested decision and then I will take a decision. Cheers."
+37,40,l3,belief,I think the result depends on others decision
+38,104,l3,belief,I reckon the average will be players saying 66/100 approx due to it being two thirds.I believe we should say two thirds of that number which would range between 40 and 50The lower range will probably be a wiser move as a few others will estimate lower.Personally i would be happy with anything between 38-42.
+39,20,l3,belief,i just used 50 which is the average of 0 and 100.
+40,105,l3,belief,Every tries to guess the two-thirds of the average.If every one choose randomly from 0 {100 then the average would be 50then the two-thirds would be about 33so I would guess 33I am a Mathematican
+41,4,l3,level,"60 seems close to the average between the number of 0 to 100, and i guess more people will choose the average no."
+42,71,l3,level,"well i guess the average will be about 50-60, so this is roughly down to two thirds, what do yousay? :)"
+43,70,l3,level,what do you think?
+44,29,l3,level,"to be honest i have little directed thought about thisbut...say the average is 50, then two thirds of 50 is around mid-30si think?either way it's my lucky number!wow sorry thats not more helpful.i'll see what you've said though.. will probably make more sense!"
+45,6,l3,level,"I am not an economist, but I'm looking at at whole I think the avearge maybe around 60. Therefore, 40 would be the two thirds of this it also seems reasonable."
+46,110,l3,level,"I'm not entirely sure what sort of objective we are looking for, but as 66 is two thirds from 0 to100i suggest we choose this numberand again it's mere luck or probability which i'm not sure how to calculate."
+47,2,l3,level,"If 50 were average, 2/3rds would be around 33. I would imagine the average to be above 50, and therefore guess around 39.Realisitically the answer will be between 33-66.So maybe higher than 39? Perhaps 43"
+48,3,l3,level,"Hey partner:) I am doing econs 2nd year, we've studied this experiment on our lectures let me just explain to you how it works: the average of all scores will ve centred arond 50, then if we multiply it by 2/3 it will give 33.3. HOWEVER, note that 33 is the number that most people will put, because they can calculate up to that point. YET whan majority fails to foresee is that if everyone puts 33, then the real target average is 22!and that's the number we should put in."
+49,24,l3,level,"Assuming that the overall total of the 6 teams is around 300, giving an average of about 50 iwould suggest 32 as a decision since some may tend above 50 while others below iti think the average will be around about 50 in which case we should submit an answer of about32 or 33"
+50,108,l3,level,"I assume that most teams will choose low initial numbers, as they will be aiming to undercutthe other teams, being closer to the 2/3 target pointBy choosing 20, i think that it will be high to be above the initial low numbers, whilst not beingso astronomically high as to rule us out entirely."
+51,3_12,p1,promise,Choose IN \n I promise I’ll ROLL.
+52,1_11,p1,promise,"What’s up? Good luck on your decision. Choose whatever. If you choose “out,” you get only $10 total. If you choose “In,” you can get $17 total instead of only $10. 7 bucks is a lot of money!"
+53,1_5,p1,promise,"If you will choose “In”, I will choose to roll. This way, we both have an opportunity to make more than $5! :)"
+54,3_7,p1,promise,"I will roll, so if you stay in, you’ve got a 5 /6 chance of getting $12. \n If you don’t mind the risk, if you stay in we’ll both probably get more than $5… Pretty cool to get money, eh? I’m kinda bored. Hope you’ve had a great day so far! \n My country Tis of Thee \n Sweet Land of Liberty \n Of Thee I sing. \n Land where my fathers died \n Land of the Pilgrim’s Pride \n On every mountainside \n Let freedom ring. \n\n George W . Bush wants you to go in! Bin Laden says “out”! :)"
+55,1_10,p1,promise,"Good luck \n I do not know what I’m going to do, so I have no hints on how to advise you on choosing “in” or “out.” Though it would be beneﬁcial for me to pick don’t roll and hope you pick “in”, I also like to give you a chance to gain some cash. Who knows?"
+56,3_3,p1,promise,"Tee hee, this is kinda Twilight Zone – ism; Why not “go for it”, eh? I hope you have a lovely evening as well."
+57,1_13,p1,promise,take a risk
+58,2_5,p1,promise,"choose in, & I’ll roll."
+59,3_8,p1,promise,"Lets together get the most $ out of this that we can: \n you 12 0 0 5 \n me 10 10 14 5 \n I promise not to do this one [points out: me 14 and you 0 values in the text]. I promise I will choose to roll. You can have the extra $2 bucks. \n It’s good karma. \n Thanks. \n I will choose ROLL in any case considering I will get the same amount no matter what you choose, as long as you choose IN. \n please excuse the awful handwriting. I’m trying"
+60,1_12,p1,promise,Hey. OK I think that the best way for both of us to make a proﬁt is for you to choose IN and for me to roll. That way we both make some money. There’s no point in me not rolling because that would give you and me less proﬁt. So I’m a roller if you’re in. :)
+61,794,p2,promise,"P3: hi
+
+P2: hi
+
+P2: NA
+P1: Hey
+
+P3: full 200?
+
+P1: cool
+
+P2: yeah i'm happy for full 200
+
+P3: nice
+"
+62,51,p2,promise,"P1: Hi, how much do you want to invest?
+
+P1: if everyone invests 200 it should give the best return
+
+P2: invest the max so we can all get double?
+P1: what do you think
+
+P3: I'm going to go with the full £2
+P1: that seems to bes best
+"
+63,561,p2,promise,"P1: Hey all investing will give good returns and is good for all 3 of us, I am going for 200
+
+P1: Please reply, all going for 200
+"
+64,439,p2,promise,"P2: Hello
+
+P3: 200 is best!
+
+P1: 200 is good!
+
+P2: agree
+
+P3: All equally get 400
+
+P3: ideal amount
+"
+65,518,p2,promise,"P2: 200 each?
+
+P2: gives best result
+
+P1: if we all invest the full 200 we will get more back
+P3: Hi, i'm thinking 200 too
+"
+66,887,p2,promise,"P1: I have no idea
+
+P2: I think its fairest if we all put in 200"
+67,900,p2,promise,"P2: what do you think, maximum of 200 or a smaller amout?
+
+P3: Maximum, everybody wins!
+
+P2: ok
+"
+68,122,p2,promise,"P3: hi
+
+P2: 200?
+
+P3: 200 each - fairest way!"
+69,979,p2,promise,"P1: hi guys, how much are you going for this round?
+
+P1: hi guys, how much are you going for this round?
+
+P1: hi guys, how much are you going for this round?
+
+P1: hi guys, how much are you going for this round?
+
+
+P1: hi guys, how much are you going for this round?
+P1: hi there
+
+P1: hi there
+P1: hi there
+P1: hi there
+P1: hi there
+P1: hi there
+P3: I'm going all in :)
+P2: again 200 guys
+
+P2: again 200 guys
+
+P1: oop technical issues i think
+"
+70,878,p2,promise,"P2: Hi, have you got any ideas of intended investment? 
+
+P1: Hello
+
+P2: I think we should each invest 40 and have a nice return whilst retaining the rest. 
+
+P1: We should all invest 200 for maximum returns back
+P2: OK, I'll give that a go. 
+"
