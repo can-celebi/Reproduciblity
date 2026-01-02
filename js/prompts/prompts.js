@@ -147,12 +147,17 @@ Classify as **empty talk** (0) if:
 - The player references past behavior without current commitment
 - The player changes their mind after an initial commitment
 
+Classify as **not applicable** (na) if:
+
+- The player did not send any messages in the conversation
+
 **Important**: Capture what was said, not why it was said or what effect it had.
 
 # Classification Coding
 
 - Code promise or statement of intent as "1"
 - Code empty talk as "0"
+- Code player did not speak as "na"
 
 # Constraints
 
@@ -226,6 +231,26 @@ P3: I suggest 100
 P2: I'm happy with either
 ### Classification
 {"p1":"1","p2":"0","p3":"0"}
+
+## Example 10
+### Message
+P1: let's all do 200
+P2: sounds good
+### Classification
+{"p1":"0","p2":"1","p3":"na"}
+
+## Example 11
+### Message
+P1: 200?
+### Classification
+{"p1":"0","p2":"na","p3":"na"}
+
+## Example 12
+### Message
+P1: I'll put in 200
+P3: me too
+### Classification
+{"p1":"1","p2":"na","p3":"1"}
 `,
 
     // =========================================================================

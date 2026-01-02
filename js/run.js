@@ -16,8 +16,9 @@ const { schemas } = require("./schemas/schemas");
 // =============================================================================
 
 const CONFIG = {
-    // Model Settings
-    deployment: "gpt-4o",
+    // Model Settings - can be overridden with MODEL env variable
+    // Options: "gpt-4o", "gpt-4o-mini"
+    deployment: process.env.MODEL || "gpt-4o",
     seed: 31,
     maxTokens: 50,
     temperature: 0,
@@ -26,8 +27,12 @@ const CONFIG = {
     // Execution Settings
     // With 7 resources at 150K TPM each = 1,050K TPM total
     // Batch size = 5 per resource × 7 resources = 35
-    batchSize: 35,
-    delayBetweenBatches: 1200,  // 1.2 seconds - conservative for rate limits
+    // batchSize: 35,
+    // delayBetweenBatches: 1200,  // 1.2 seconds - conservative for rate limits
+    
+    // gpt-4o-mini can handle more aggressive settings
+    batchSize: 70, // 10 per resource × 7 resources = 70
+    delayBetweenBatches: 1000,  // 1 second - more aggressive settings
     
     // Retry Settings
     maxRetries: 5,
@@ -36,10 +41,19 @@ const CONFIG = {
     consecutiveErrorsBeforePause: 20,
     rateLimitPause: 60000,      // 1 minute on rate limit
     
-    // Paths
+    // Output Settings
+    verbose: process.env.VERBOSE === "true",  // Set VERBOSE=true for detailed logs
+    
+    // Paths - output goes to model-specific subdirectory
     dataDir: "../data",
-    outputDir: "../output",
-    inputFile: "instances_test.csv",  // Change to "instances.csv" for real run
+    get outputDir() {
+        // Create model-specific output directory
+        // gpt-4o -> ../output/gpt-4o/
+        // gpt-4o-mini -> ../output/gpt-4o-mini/
+        return `../output/${this.deployment}`;
+    },
+    // Support DATASET env variable for dashboard, default to instances_test.csv
+    inputFile: "instances.csv",
 };
 
 // =============================================================================
@@ -231,12 +245,17 @@ function getErrorType(error) {
  * - Rate limit errors: Switch resource + brief pause
  * - Transient errors: Exponential backoff + retry
  */
-async function callWithRetry(systemPrompt, userText, schema, instanceId) {
+async function callWithRetry(systemPrompt, userText, schema, instanceId, dataset, task) {
     let lastError;
     let clientWrapper = clientPool.getNextClient();
     const triedResources = new Set();
+    let retryStarted = false;
     
-    for (let attempt = 1; attempt <= CONFIG.maxRetries; attempt++) {
+    // For content filter, we try each resource once
+    // For other errors, we use maxRetries
+    const maxAttempts = Math.max(CONFIG.maxRetries, clientPool.clients.length);
+    
+    for (let attempt = 1; attempt <= maxAttempts; attempt++) {
         try {
             const response = await clientWrapper.client.chat.completions.create({
                 messages: [
@@ -255,6 +274,11 @@ async function callWithRetry(systemPrompt, userText, schema, instanceId) {
             const totalTokens = response.usage.prompt_tokens + response.usage.completion_tokens;
             clientPool.recordUsage(clientWrapper, totalTokens);
             
+            // If we had retries, show resolution
+            if (retryStarted) {
+                console.log(`  └─ ✅ [${instanceId}] RESOLVED on attempt ${attempt} via ${clientWrapper.name}`);
+            }
+            
             return { success: true, response, resourceName: clientWrapper.name };
             
         } catch (error) {
@@ -264,39 +288,52 @@ async function callWithRetry(systemPrompt, userText, schema, instanceId) {
             
             const errorType = getErrorType(error);
             
-            console.error(`  [${clientWrapper.name}] Attempt ${attempt}/${CONFIG.maxRetries} failed for instance ${instanceId} (${errorType}): ${error.message.substring(0, 100)}`);
+            // Visual grouping for retry sequences
+            if (!retryStarted) {
+                console.log(`  ┌─ ⚠️  [${instanceId}] ${dataset}_${task} ERROR SEQUENCE`);
+                retryStarted = true;
+            }
+            console.log(`  │  Attempt ${attempt} on ${clientWrapper.name}: ${errorType}`);
+            console.log(`  │  ${error.message.substring(0, 80)}`);
             
-            if (attempt < CONFIG.maxRetries) {
-                if (errorType === 'content_filter') {
-                    // Content filter: try another resource WITHOUT waiting
-                    // If we've tried all resources, fail immediately
-                    if (triedResources.size >= clientPool.clients.length) {
-                        console.log(`  ❌ Content filter on all ${triedResources.size} resources. Skipping instance.`);
-                        break;
-                    }
-                    // Find a resource we haven't tried yet
-                    const untried = clientPool.clients.find(c => !triedResources.has(c.name));
-                    if (untried) {
-                        clientWrapper = untried;
-                        console.log(`  🔄 Content filter - trying ${clientWrapper.name} (no wait)...`);
-                    } else {
-                        break;
-                    }
-                    // No sleep - try immediately
-                    
-                } else if (errorType === 'rate_limit') {
-                    // Rate limit: switch resource + brief pause
-                    console.log(`  ⚠️ Rate limit on ${clientWrapper.name}, switching resource...`);
-                    clientWrapper = clientPool.getHealthiestClient();
-                    await sleep(1000);
-                    
-                } else {
-                    // Transient/other errors: exponential backoff
-                    const delay = CONFIG.initialRetryDelay * Math.pow(2, attempt - 1);
-                    console.log(`  Waiting ${delay / 1000}s before retry...`);
-                    await sleep(delay);
-                    clientWrapper = clientPool.getNextClient();
+            if (errorType === 'content_filter') {
+                // Content filter: try another resource WITHOUT waiting
+                // If we've tried all resources, fail immediately
+                if (triedResources.size >= clientPool.clients.length) {
+                    console.log(`  └─ ❌ [${instanceId}] FAILED: Content filter on all ${triedResources.size} resources`);
+                    return { success: false, error: lastError, errorType: getErrorType(lastError) };
                 }
+                // Find a resource we haven't tried yet
+                const untried = clientPool.clients.find(c => !triedResources.has(c.name));
+                if (untried) {
+                    clientWrapper = untried;
+                    console.log(`  │  → Trying ${clientWrapper.name}...`);
+                } else {
+                    console.log(`  └─ ❌ [${instanceId}] FAILED: No more resources to try`);
+                    return { success: false, error: lastError, errorType: getErrorType(lastError) };
+                }
+                // No sleep - try immediately
+                
+            } else if (errorType === 'rate_limit') {
+                if (attempt >= CONFIG.maxRetries) {
+                    console.log(`  └─ ❌ [${instanceId}] FAILED: Rate limit after ${attempt} attempts`);
+                    break;
+                }
+                // Rate limit: switch resource + brief pause
+                console.log(`  │  → Rate limit, switching resource + 1s pause...`);
+                clientWrapper = clientPool.getHealthiestClient();
+                await sleep(1000);
+                
+            } else {
+                if (attempt >= CONFIG.maxRetries) {
+                    console.log(`  └─ ❌ [${instanceId}] FAILED: ${errorType} after ${attempt} attempts`);
+                    break;
+                }
+                // Transient/other errors: exponential backoff
+                const delay = CONFIG.initialRetryDelay * Math.pow(2, attempt - 1);
+                console.log(`  │  → Waiting ${delay / 1000}s before retry...`);
+                await sleep(delay);
+                clientWrapper = clientPool.getNextClient();
             }
         }
     }
@@ -340,7 +377,7 @@ async function classifyInstance(instance, runNumber) {
     }
     
     const startTime = Date.now();
-    const { success, response, error, errorType, resourceName } = await callWithRetry(systemPrompt, input, schema, id);
+    const { success, response, error, errorType, resourceName } = await callWithRetry(systemPrompt, input, schema, id, dataset, task);
     const endTime = Date.now();
     
     if (!success) {
@@ -424,8 +461,11 @@ async function processBatch(instances, runNumber, outputPath, existingResults) {
         } else {
             appendResult(outputPath, result);
             existingResults.all.push(result);
-            const status = result.hasError ? "ERROR" : "OK";
-            console.log(`  [${result.id}] ${result.dataset}_${result.task} ${status} (${result.duration}s) [${result.resource || '-'}]`);
+            // Only log errors or if verbose mode is on
+            if (result.hasError || CONFIG.verbose) {
+                const status = result.hasError ? "ERROR" : "OK";
+                console.log(`  [${result.id}] ${result.dataset}_${result.task} ${status} (${result.duration}s) [${result.resource || '-'}]`);
+            }
         }
         
         if (result.hasError) {
@@ -501,6 +541,15 @@ async function executeRun(instances, runNumber, outputPath, errorsOnly = false) 
         const results = await processBatch(batch, runNumber, outputPath, existingResults);
         
         const batchErrors = results.filter(r => r.hasError).length;
+        const batchOK = results.length - batchErrors;
+        
+        // Show batch summary
+        if (batchErrors > 0) {
+            console.log(`  ✓ ${batchOK} OK, ✗ ${batchErrors} errors`);
+        } else {
+            console.log(`  ✓ ${batchOK}/${batch.length} completed`);
+        }
+        
         if (batchErrors === batch.length) {
             consecutiveErrors += batchErrors;
             console.warn(`\n⚠️  All ${batchErrors} in batch failed!`);
@@ -566,6 +615,7 @@ async function main() {
     console.log(`Seed: ${CONFIG.seed}`);
     console.log(`Batch size: ${CONFIG.batchSize}`);
     console.log(`Resources: ${clientPool.clients.length}`);
+    console.log(`Output: ${CONFIG.outputDir}`);
     console.log(`Runs: ${startRun} to ${endRun}`);
     if (errorsOnly) {
         console.log(`Mode: ERRORS ONLY (retrying previous errors)`);

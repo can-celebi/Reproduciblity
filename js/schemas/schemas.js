@@ -40,7 +40,7 @@ const schemas = {
 
     // =========================================================================
     // P2: Promise Classification (chat with up to 3 players)
-    // 0 = empty talk, 1 = promise, per player
+    // 0 = empty talk, 1 = promise, na = did not speak, per player
     // =========================================================================
     p2_promise: {
         type: "json_schema",
@@ -52,15 +52,15 @@ const schemas = {
                 properties: {
                     p1: {
                         type: "string",
-                        enum: ["0", "1"]
+                        enum: ["0", "1", "na"]
                     },
                     p2: {
                         type: "string",
-                        enum: ["0", "1"]
+                        enum: ["0", "1", "na"]
                     },
                     p3: {
                         type: "string",
-                        enum: ["0", "1"]
+                        enum: ["0", "1", "na"]
                     }
                 },
                 required: ["p1", "p2", "p3"],

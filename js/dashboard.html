@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LLM Classification Stability Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0a0a0f;
+            color: #e0e0e0;
+            min-height: 100vh;
+        }
+        
+        /* Header */
+        .header {
+            background: linear-gradient(180deg, rgba(0, 212, 255, 0.1) 0%, transparent 100%);
+            border-bottom: 1px solid rgba(0, 212, 255, 0.2);
+            padding: 20px 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .header h1 {
+            font-size: 22px;
+            font-weight: 600;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .header h1 span {
+            color: #00d4ff;
+        }
+        
+        .header-status {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        /* Main layout */
+        .main {
+            display: grid;
+            grid-template-columns: 280px 1fr 320px;
+            gap: 0;
+            height: calc(100vh - 73px);
+        }
+        
+        @media (max-width: 1200px) {
+            .main {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Left Panel - Controls */
+        .panel-left {
+            background: rgba(255, 255, 255, 0.02);
+            border-right: 1px solid rgba(255, 255, 255, 0.06);
+            padding: 20px;
+            overflow-y: auto;
+        }
+        
+        /* Center Panel - Logs */
+        .panel-center {
+            display: flex;
+            flex-direction: column;
+            background: #0d0d12;
+            min-height: 0; /* Important for flex child scrolling */
+        }
+        
+        /* Right Panel - Stats */
+        .panel-right {
+            background: rgba(255, 255, 255, 0.02);
+            border-left: 1px solid rgba(255, 255, 255, 0.06);
+            padding: 20px;
+            overflow-y: auto;
+        }
+        
+        /* Section titles */
+        .section-title {
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: #666;
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        }
+        
+        /* Form controls */
+        .control-group {
+            margin-bottom: 20px;
+        }
+        
+        .control-label {
+            font-size: 12px;
+            color: #888;
+            margin-bottom: 6px;
+            display: block;
+        }
+        
+        select, input[type="number"] {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 12px 14px;
+            color: #fff;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+        
+        select:focus, input:focus {
+            outline: none;
+            border-color: #00d4ff;
+            box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.1);
+        }
+        
+        .input-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        
+        /* Buttons */
+        .btn {
+            width: 100%;
+            padding: 14px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #00d4ff 0%, #0099cc 100%);
+            color: #000;
+        }
+        
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 20px rgba(0, 212, 255, 0.4);
+        }
+        
+        .btn-danger {
+            background: rgba(255, 71, 87, 0.2);
+            color: #ff4757;
+            border: 1px solid rgba(255, 71, 87, 0.3);
+        }
+        
+        .btn-danger:hover:not(:disabled) {
+            background: rgba(255, 71, 87, 0.3);
+        }
+        
+        .btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .btn-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        /* Status badge */
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .status-idle { background: rgba(255, 255, 255, 0.1); color: #888; }
+        .status-running { 
+            background: rgba(0, 212, 255, 0.2); 
+            color: #00d4ff;
+            animation: pulse 2s infinite;
+        }
+        .status-completed { background: rgba(46, 213, 115, 0.2); color: #2ed573; }
+        .status-error { background: rgba(255, 71, 87, 0.2); color: #ff4757; }
+        .status-stopped { background: rgba(255, 165, 2, 0.2); color: #ffa502; }
+        
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: currentColor;
+        }
+        
+        .status-running .status-dot {
+            animation: blink 1s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+        
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+        
+        /* Progress section */
+        .progress-section {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 20px;
+        }
+        
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .progress-label {
+            font-size: 13px;
+            color: #888;
+        }
+        
+        .progress-value {
+            font-size: 13px;
+            font-weight: 600;
+            color: #00d4ff;
+        }
+        
+        .progress-bar-bg {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 6px;
+            height: 8px;
+            overflow: hidden;
+        }
+        
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #00d4ff 0%, #2ed573 100%);
+            border-radius: 6px;
+            transition: width 0.3s ease;
+        }
+        
+        .progress-stats {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+            font-size: 12px;
+            color: #666;
+        }
+        
+        .progress-stats .errors {
+            color: #ff4757;
+        }
+        
+        /* Stats grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        
+        .stat-card {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            padding: 14px;
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 20px;
+            font-weight: 700;
+            color: #fff;
+        }
+        
+        .stat-value.highlight {
+            color: #00d4ff;
+        }
+        
+        .stat-label {
+            font-size: 10px;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 4px;
+        }
+        
+        /* Time row */
+        .time-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .time-card {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            padding: 12px 8px;
+            text-align: center;
+        }
+        
+        .time-value {
+            font-size: 18px;
+            font-weight: 600;
+            color: #fff;
+            font-family: 'SF Mono', Monaco, monospace;
+        }
+        
+        .time-label {
+            font-size: 9px;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 4px;
+        }
+        
+        /* Cost card */
+        .cost-card {
+            background: linear-gradient(135deg, rgba(46, 213, 115, 0.15) 0%, rgba(0, 212, 255, 0.15) 100%);
+            border: 1px solid rgba(46, 213, 115, 0.2);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .cost-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: #2ed573;
+        }
+        
+        .cost-breakdown {
+            font-size: 11px;
+            color: #888;
+            margin-top: 6px;
+        }
+        
+        /* Run history */
+        .run-history {
+            max-height: 180px;
+            overflow-y: auto;
+        }
+        
+        .run-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 12px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            margin-bottom: 6px;
+            font-size: 13px;
+        }
+        
+        .run-item-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .run-num {
+            font-weight: 600;
+            color: #00d4ff;
+        }
+        
+        .run-item-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .run-success {
+            color: #2ed573;
+        }
+        
+        .run-error {
+            color: #ff4757;
+        }
+        
+        /* Errors section */
+        .errors-section {
+            margin-bottom: 20px;
+        }
+        
+        .errors-list {
+            max-height: 150px;
+            overflow-y: auto;
+        }
+        
+        .error-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 12px;
+            background: rgba(255, 71, 87, 0.1);
+            border-left: 3px solid #ff4757;
+            border-radius: 0 8px 8px 0;
+            margin-bottom: 6px;
+            font-size: 12px;
+        }
+        
+        .error-id {
+            font-weight: 600;
+            color: #ff4757;
+        }
+        
+        .error-task {
+            color: #888;
+        }
+        
+        .error-run {
+            color: #666;
+            margin-left: auto;
+        }
+        
+        /* Logs panel */
+        .logs-header {
+            padding: 16px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logs-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .logs-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .logs-actions button {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 6px;
+            padding: 6px 12px;
+            color: #888;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .logs-actions button:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+        }
+        
+        .logs-container {
+            flex: 1;
+            min-height: 0; /* Critical for flex scrolling */
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding: 16px 20px;
+            font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace;
+            font-size: 12px;
+            line-height: 1.6;
+            background: #0a0a0e;
+        }
+        
+        .log-entry {
+            display: flex;
+            gap: 12px;
+            padding: 2px 0;
+        }
+        
+        .log-time {
+            color: #444;
+            flex-shrink: 0;
+        }
+        
+        .log-text {
+            color: #888;
+            word-break: break-all;
+        }
+        
+        .log-stdout .log-text { color: #b0b0b0; }
+        .log-stderr .log-text { color: #ff6b6b; }
+        .log-info .log-text { color: #00d4ff; }
+        .log-warning .log-text { color: #ffa502; }
+        .log-error .log-text { color: #ff4757; }
+        
+        /* Empty states */
+        .empty-state {
+            text-align: center;
+            padding: 30px 20px;
+            color: #444;
+            font-size: 13px;
+        }
+        
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.02);
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <h1>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#00d4ff" stroke-width="2">
+                <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
+            </svg>
+            LLM Classification <span>Stability Study</span>
+        </h1>
+        <div class="header-status">
+            <span class="status-badge status-idle" id="statusBadge">
+                <span class="status-dot"></span>
+                <span id="statusText">Idle</span>
+            </span>
+        </div>
+    </header>
+    
+    <!-- Main layout -->
+    <main class="main">
+        <!-- Left Panel - Controls -->
+        <aside class="panel-left">
+            <div class="section-title">Configuration</div>
+            
+            <div class="control-group">
+                <label class="control-label">Dataset</label>
+                <select id="dataset">
+                    <option value="instances_test.csv">instances_test.csv (70)</option>
+                    <option value="instances.csv">instances.csv (3,108)</option>
+                </select>
+            </div>
+            
+            <div class="control-group">
+                <label class="control-label">Run Range</label>
+                <div class="input-row">
+                    <input type="number" id="startRun" value="1" min="1" max="100" placeholder="From">
+                    <input type="number" id="endRun" value="1" min="1" max="100" placeholder="To">
+                </div>
+            </div>
+            
+            <div class="btn-group">
+                <button class="btn btn-primary" id="startBtn" onclick="startRun()">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                        <polygon points="5 3 19 12 5 21 5 3"/>
+                    </svg>
+                    Start Run
+                </button>
+                <button class="btn btn-danger" id="stopBtn" onclick="stopRun()" disabled>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                        <rect x="6" y="6" width="12" height="12"/>
+                    </svg>
+                    Stop
+                </button>
+            </div>
+            
+            <div style="margin-top: 30px;">
+                <div class="section-title">Progress</div>
+                
+                <div class="progress-section">
+                    <div class="progress-header">
+                        <span class="progress-label">Run <span id="currentRun">-</span> of <span id="totalRuns">-</span></span>
+                        <span class="progress-value" id="progressPercent">0%</span>
+                    </div>
+                    <div class="progress-bar-bg">
+                        <div class="progress-bar-fill" id="progressBar" style="width: 0%"></div>
+                    </div>
+                    <div class="progress-stats">
+                        <span><span id="completed">0</span> / <span id="total">0</span> instances</span>
+                        <span class="errors" id="errorCount">0 errors</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+        
+        <!-- Center Panel - Logs -->
+        <section class="panel-center">
+            <div class="logs-header">
+                <span class="logs-title">Live Output</span>
+                <div class="logs-actions">
+                    <button onclick="clearLogs()">Clear</button>
+                    <button onclick="scrollToBottom()">↓ Bottom</button>
+                </div>
+            </div>
+            <div class="logs-container" id="logs">
+                <div class="empty-state">Waiting for run to start...</div>
+            </div>
+        </section>
+        
+        <!-- Right Panel - Stats -->
+        <aside class="panel-right">
+            <div class="section-title">Time & Performance</div>
+            
+            <div class="time-row">
+                <div class="time-card">
+                    <div class="time-value" id="elapsed">00:00</div>
+                    <div class="time-label">Elapsed</div>
+                </div>
+                <div class="time-card">
+                    <div class="time-value" id="eta">--:--</div>
+                    <div class="time-label">ETA</div>
+                </div>
+                <div class="time-card">
+                    <div class="time-value" id="rate">-</div>
+                    <div class="time-label">inst/min</div>
+                </div>
+            </div>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value highlight" id="tokensIn">0</div>
+                    <div class="stat-label">Input Tokens</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value highlight" id="tokensOut">0</div>
+                    <div class="stat-label">Output Tokens</div>
+                </div>
+            </div>
+            
+            <div class="cost-card">
+                <div class="cost-value">$<span id="cost">0.00</span></div>
+                <div class="cost-breakdown" id="costBreakdown">$0.000 in + $0.000 out</div>
+            </div>
+            
+            <div class="section-title">Run History</div>
+            <div class="run-history" id="runHistory">
+                <div class="empty-state">No runs completed yet</div>
+            </div>
+            
+            <div class="errors-section" id="errorsSection" style="display: none; margin-top: 20px;">
+                <div class="section-title">Errors (<span id="totalErrors">0</span>)</div>
+                <div class="errors-list" id="errorsList"></div>
+            </div>
+        </aside>
+    </main>
+
+    <script>
+        let ws;
+        let state = {};
+        
+        // Connect WebSocket
+        function connect() {
+            const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+            ws = new WebSocket(`${protocol}//${window.location.host}`);
+            
+            ws.onopen = () => console.log("Connected to server");
+            
+            ws.onmessage = (event) => {
+                const data = JSON.parse(event.data);
+                if (data.type === "state") {
+                    state = data.state;
+                    updateUI();
+                } else if (data.type === "log") {
+                    addLogEntry(data.entry);
+                }
+            };
+            
+            ws.onclose = () => {
+                console.log("Disconnected, reconnecting in 2s...");
+                setTimeout(connect, 2000);
+            };
+        }
+        
+        function updateUI() {
+            // Status
+            const badge = document.getElementById("statusBadge");
+            const text = document.getElementById("statusText");
+            badge.className = `status-badge status-${state.status}`;
+            text.textContent = state.status.charAt(0).toUpperCase() + state.status.slice(1);
+            
+            // Buttons
+            document.getElementById("startBtn").disabled = state.status === "running";
+            document.getElementById("stopBtn").disabled = state.status !== "running";
+            
+            // Progress - show current run info
+            document.getElementById("currentRun").textContent = state.currentRun || "-";
+            document.getElementById("totalRuns").textContent = state.totalRuns || "-";
+            document.getElementById("completed").textContent = state.instancesCompleted || 0;
+            document.getElementById("total").textContent = state.instancesTotal || 0;
+            document.getElementById("errorCount").textContent = `${state.instancesErrors || 0} errors`;
+            
+            // Calculate progress: completed runs + current run progress
+            const completedRuns = state.runHistory ? state.runHistory.length : 0;
+            const totalRuns = state.totalRuns || 1;
+            const instancesTotal = state.instancesTotal || 1;
+            
+            // Progress = (completed runs * 100 + current run progress) / total runs
+            const currentRunProgress = instancesTotal > 0 
+                ? ((state.instancesCompleted || 0) / instancesTotal) * 100 
+                : 0;
+            const overallProgress = ((completedRuns * 100) + currentRunProgress) / totalRuns;
+            
+            document.getElementById("progressBar").style.width = `${Math.min(overallProgress, 100)}%`;
+            document.getElementById("progressPercent").textContent = `${overallProgress.toFixed(1)}%`;
+            
+            // Tokens
+            document.getElementById("tokensIn").textContent = formatNumber(state.tokensIn || 0);
+            document.getElementById("tokensOut").textContent = formatNumber(state.tokensOut || 0);
+            
+            // Cost (GPT-4o pricing)
+            const costIn = (state.tokensIn || 0) * 2.50 / 1000000;
+            const costOut = (state.tokensOut || 0) * 10 / 1000000;
+            document.getElementById("cost").textContent = (costIn + costOut).toFixed(2);
+            document.getElementById("costBreakdown").textContent = `$${costIn.toFixed(3)} in + $${costOut.toFixed(3)} out`;
+            
+            // Time calculations
+            if (state.startTime) {
+                const elapsed = Date.now() - state.startTime;
+                document.getElementById("elapsed").textContent = formatTime(elapsed);
+                
+                // Calculate total work done for ETA
+                const totalWork = totalRuns * instancesTotal;
+                const workDone = (completedRuns * instancesTotal) + (state.instancesCompleted || 0);
+                
+                if (workDone > 0 && state.status === "running") {
+                    const rate = workDone / (elapsed / 60000); // instances per minute
+                    const remaining = totalWork - workDone;
+                    const eta = remaining / rate * 60000;
+                    document.getElementById("eta").textContent = formatTime(eta);
+                    document.getElementById("rate").textContent = rate.toFixed(0);
+                }
+            }
+            
+            updateRunHistory();
+            updateErrors();
+        }
+        
+        function updateRunHistory() {
+            const container = document.getElementById("runHistory");
+            if (!state.runHistory || state.runHistory.length === 0) {
+                container.innerHTML = '<div class="empty-state">No runs completed yet</div>';
+                return;
+            }
+            
+            container.innerHTML = state.runHistory.map(run => `
+                <div class="run-item">
+                    <div class="run-item-left">
+                        <span class="run-num">Run ${run.run}</span>
+                    </div>
+                    <div class="run-item-right">
+                        <span class="run-success">✓ ${run.completed}</span>
+                        ${run.errors > 0 ? `<span class="run-error">✗ ${run.errors}</span>` : ''}
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        function updateErrors() {
+            const section = document.getElementById("errorsSection");
+            const list = document.getElementById("errorsList");
+            const total = document.getElementById("totalErrors");
+            
+            if (!state.errors || state.errors.length === 0) {
+                section.style.display = "none";
+                return;
+            }
+            
+            section.style.display = "block";
+            total.textContent = state.errors.length;
+            
+            list.innerHTML = state.errors.map(err => `
+                <div class="error-item">
+                    <span class="error-id">#${err.id}</span>
+                    <span class="error-task">${err.task}</span>
+                    <span class="error-run">Run ${err.run}</span>
+                </div>
+            `).join('');
+        }
+        
+        function addLogEntry(entry) {
+            const logs = document.getElementById("logs");
+            
+            // Clear empty state
+            if (logs.querySelector('.empty-state')) {
+                logs.innerHTML = "";
+            }
+            
+            const div = document.createElement("div");
+            div.className = `log-entry log-${entry.type}`;
+            div.innerHTML = `<span class="log-time">${entry.time}</span><span class="log-text">${escapeHtml(entry.text)}</span>`;
+            logs.appendChild(div);
+            
+            // Auto-scroll if near bottom
+            if (logs.scrollHeight - logs.scrollTop - logs.clientHeight < 100) {
+                logs.scrollTop = logs.scrollHeight;
+            }
+            
+            // Limit entries
+            while (logs.children.length > 1000) {
+                logs.removeChild(logs.firstChild);
+            }
+        }
+        
+        function clearLogs() {
+            document.getElementById("logs").innerHTML = '<div class="empty-state">Logs cleared</div>';
+        }
+        
+        function scrollToBottom() {
+            const logs = document.getElementById("logs");
+            logs.scrollTop = logs.scrollHeight;
+        }
+        
+        async function startRun() {
+            const sr = parseInt(document.getElementById("startRun").value) || 1;
+            const er = parseInt(document.getElementById("endRun").value) || 1;
+            const dataset = document.getElementById("dataset").value;
+            
+            try {
+                const response = await fetch("/api/start", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ startRun: sr, endRun: er, dataset })
+                });
+                const result = await response.json();
+                if (result.error) alert(result.error);
+            } catch (e) {
+                alert("Failed to start: " + e.message);
+            }
+        }
+        
+        async function stopRun() {
+            if (!confirm("Stop the current run?")) return;
+            try {
+                await fetch("/api/stop", { method: "POST" });
+            } catch (e) {
+                alert("Failed to stop: " + e.message);
+            }
+        }
+        
+        function formatNumber(n) {
+            if (n >= 1000000) return (n / 1000000).toFixed(1) + "M";
+            if (n >= 1000) return (n / 1000).toFixed(1) + "K";
+            return n.toLocaleString();
+        }
+        
+        function formatTime(ms) {
+            const s = Math.floor(ms / 1000);
+            const m = Math.floor(s / 60);
+            const h = Math.floor(m / 60);
+            if (h > 0) return `${h}:${(m % 60).toString().padStart(2, '0')}:${(s % 60).toString().padStart(2, '0')}`;
+            return `${m}:${(s % 60).toString().padStart(2, '0')}`;
+        }
+        
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+        
+        // Update elapsed time every second
+        setInterval(() => {
+            if (state.status === "running" && state.startTime) {
+                document.getElementById("elapsed").textContent = formatTime(Date.now() - state.startTime);
+            }
+        }, 1000);
+        
+        connect();
+    </script>
+</body>
+</html>
