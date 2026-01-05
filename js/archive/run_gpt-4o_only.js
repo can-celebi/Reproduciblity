@@ -7,9 +7,9 @@ const { AzureOpenAI } = require("openai");
 // IMPORTS
 // =============================================================================
 
-const { resources } = require("./keys/secret");  // Now exports array of resources
-const { prompts } = require("./prompts/prompts");
-const { schemas } = require("./schemas/schemas");
+const { resources } = require("../keys/secret");  // Now exports array of resources
+const { prompts } = require("../prompts/prompts");
+const { schemas } = require("../schemas/schemas");
 
 // =============================================================================
 // CONFIGURATION
