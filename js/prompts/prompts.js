@@ -172,40 +172,40 @@ Classify as **not applicable** (na) if:
 P1: all 200 then?
 P2: yes
 ### Classification
-{"p1":"0","p2":"1"}
+{"p1":"0","p2":"1","p3":"na"}
 
 ## Example 2
 ### Message
 P1: Are we all just going to with max?
 P2: agree
 ### Classification
-{"p1":"0","p2":"1"}
+{"p1":"0","p2":"1","p3":"na"}
 
 ## Example 3
 ### Message
 P1: I think it's best if we invest 200
 ### Classification
-{"p1":"0"}
+{"p1":"0","p2":"na","p3":"na"}
 
 ## Example 4
 ### Message
 P1: let's do 200
 ### Classification
-{"p1":"0"}
+{"p1":"0","p2":"na","p3":"na"}
 
 ## Example 5
 ### Message
 P1: 200?
 P2: let's do it
 ### Classification
-{"p1":"0","p2":"1"}
+{"p1":"0","p2":"1","p3":"na"}
 
 ## Example 6
 ### Message
 P1: 150. player 2 are you in agreement?
 P2: hi sounds good
 ### Classification
-{"p1":"1","p2":"1"}
+{"p1":"1","p2":"1","p3":"na"}
 
 ## Example 7
 ### Message
